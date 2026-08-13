@@ -1,0 +1,74 @@
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    flex-direction: column;
+    gap: 100px;
+    background-color: #232323;
+}
+
+header {
+    text-align: center;
+}
+
+header h1 {
+    margin-bottom: 15px;
+    color: white;
+    font-size: 50px;
+}
+
+header h2 {
+    font-size: 35px;
+    color: orangered;
+}
+
+#css {
+    color: lightskyblue;
+}
+
+#js {
+    color: yellow;
+}
+
+.formulario {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 35px;
+    width: 400px;
+}
+
+.formulario input {
+    padding: 15px;
+    border-radius: 5px;
+    border: none;
+}
+
+input[type="submit"] {
+    background-color: gray;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    border: 1px solid gray;
+}
+
+input[type="submit"]:hover {
+    background-color: black;
+    border: 1px solid white;
+    transition: 1s ease;
+}
+
+.formulario p {
+    color: white;
+    width: 100%;
+    padding: 15px;
+    border: 1px solid white;
+}
