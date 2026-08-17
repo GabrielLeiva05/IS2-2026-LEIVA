@@ -1,6 +1,8 @@
 package com.mycompany.pruebajpa.logica;
 
 import com.mycompany.pruebajpa.persistencia.ControladoraPersistencia;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -19,5 +21,13 @@ public class Controladora {
     
     public void editarAlumno(Alumno alu) {
         controlPersis.editarAlumno(alu);
+    }
+    
+    public Alumno traerAlumno(int id) {
+        return controlPersis.traerAlumno(id);
+    }
+    
+    public List<Alumno> traerListaAlumnos() {
+        return controlPersis.traerListaAlumnos();
     }
 }
