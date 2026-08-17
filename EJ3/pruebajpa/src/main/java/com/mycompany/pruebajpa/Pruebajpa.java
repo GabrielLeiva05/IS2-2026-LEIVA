@@ -1,6 +1,7 @@
 package com.mycompany.pruebajpa;
 
 import com.mycompany.pruebajpa.logica.Alumno;
+import com.mycompany.pruebajpa.logica.Carrera;
 import com.mycompany.pruebajpa.logica.Controladora;
 import com.mycompany.pruebajpa.persistencia.ControladoraPersistencia;
 import java.util.Date;
@@ -16,24 +17,21 @@ public class Pruebajpa {
         
         Controladora control = new Controladora();
         
-        Alumno alu = new Alumno(29, "maria", "lopez",new Date());
-        
+        //Crear Carrera
+        Carrera carre = new Carrera(91, "Lic. en Ciencias de la Computación");
+        //Guardar carrera en bd
+        control.crearCarrera(carre);
+        //Crear alumno con carrera
+        Alumno alu = new Alumno(2, "maria", "lopez",new Date(),carre);
+        //guardamos el alumno en bd
         control.crearAlumno(alu);
+        //vemos resultado
+        System.out.println("-------------------------");
+        System.out.println("---------------DATOS ALUMNO-------------");
+        Alumno alu23 = control.traerAlumno(23);
+        System.out.println("Alumno: "+alu23.getNombre() + " " + alu23.getApellido());
+        System.out.println("Cursa la carrera de: " + alu23.getCarre().getNombre());
         
-        //control.eliminarAlumno(30);
         
-        /*alu.setApellido("otro");
-        
-        control.editarAlumno(alu);*/
-        
-        Alumno alu15 = control.traerAlumno(15);
-        System.out.println("------------BÚSQUEDA INDIVIDUAL----------");
-        System.out.println("El alumno es: " + alu15.toString());
-        System.out.println("------------BÚSQUEDA DE TODOS------------");
-        List<Alumno> listaAlumnos = control.traerListaAlumnos();
-        for (Alumno a : listaAlumnos) {
-            System.out.println("El alumno es: " + a.toString());
-        }
-        System.out.println("----------------------------------------");
     }
 }

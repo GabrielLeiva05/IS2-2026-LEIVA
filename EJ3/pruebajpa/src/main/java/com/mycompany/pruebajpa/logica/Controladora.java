@@ -30,4 +30,25 @@ public class Controladora {
     public List<Alumno> traerListaAlumnos() {
         return controlPersis.traerListaAlumnos();
     }
+    
+    // Carrera
+    public void crearCarrera(Carrera carre) {
+        controlPersis.crearCarrera(carre);
+    }
+    
+    public void eliminarCarrera(int id) {
+        controlPersis.eliminarCarrera(id);
+    }
+    
+    public void editarCarrera(Carrera carre) {
+        controlPersis.editarCarrera(carre);
+    }
+    
+    public Carrera traerCarrera(int id) {
+        return controlPersis.traerCarrera(id);
+    }
+    
+    public List<Carrera> traerListaCarreras() {
+        return controlPersis.traerListaCarrera();
+    }
 }
