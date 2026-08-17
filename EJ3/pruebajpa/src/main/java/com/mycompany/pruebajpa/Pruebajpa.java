@@ -18,5 +18,11 @@ public class Pruebajpa {
         Alumno alu = new Alumno(30, "jorge", "lopez",new Date());
         
         control.crearAlumno(alu);
+        
+        //control.eliminarAlumno(30);
+        
+        alu.setApellido("otro");
+        
+        control.editarAlumno(alu);
     }
 }
