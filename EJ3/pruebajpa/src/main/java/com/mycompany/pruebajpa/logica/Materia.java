@@ -4,9 +4,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.ManyToOne;
 import java.io.Serializable;
-import java.util.LinkedList;
 
 /**
  *
@@ -14,30 +13,32 @@ import java.util.LinkedList;
  */
 
 @Entity
-public class Carrera implements Serializable {
+public class Materia implements Serializable {
     @Id
-    @GeneratedValue(strategy=GenerationType.AUTO)
+    @GeneratedValue(strategy=GenerationType.SEQUENCE)
     private int id;
     private String nombre;
+    private String tipo;
     
-    @OneToMany (mappedBy="carre")
-    private LinkedList<Materia> listaMaterias;
-
-    public Carrera() {
+    @ManyToOne
+    private Carrera carre;
+    
+    public Materia() {
     }
 
-    public Carrera(int id, String nombre, LinkedList<Materia> listaMaterias) {
+    public Materia(int id, String nombre, String tipo, Carrera carre) {
         this.id = id;
         this.nombre = nombre;
-        this.listaMaterias = listaMaterias;
+        this.tipo = tipo;
+        this.carre = carre;
     }
 
-    public LinkedList<Materia> getListaMaterias() {
-        return listaMaterias;
+    public Carrera getCarre() {
+        return carre;
     }
 
-    public void setListaMaterias(LinkedList<Materia> listaMaterias) {
-        this.listaMaterias = listaMaterias;
+    public void setCarre(Carrera carre) {
+        this.carre = carre;
     }
 
     public int getId() {
@@ -48,12 +49,20 @@ public class Carrera implements Serializable {
         return nombre;
     }
 
+    public String getTipo() {
+        return tipo;
+    }
+
     public void setId(int id) {
         this.id = id;
     }
 
     public void setNombre(String nombre) {
         this.nombre = nombre;
+    }
+
+    public void setTipo(String tipo) {
+        this.tipo = tipo;
     }
     
     

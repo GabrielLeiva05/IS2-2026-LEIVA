@@ -2,6 +2,7 @@ package com.mycompany.pruebajpa.persistencia;
 
 import com.mycompany.pruebajpa.logica.Alumno;
 import com.mycompany.pruebajpa.logica.Carrera;
+import com.mycompany.pruebajpa.logica.Materia;
 import com.mycompany.pruebajpa.persistencia.exceptions.NonexistentEntityException;
 import java.util.List;
 /**
@@ -11,6 +12,7 @@ import java.util.List;
 public class ControladoraPersistencia {
     AlumnoJpaController aluJpa = new AlumnoJpaController();
     CarreraJpaController carreJpa = new CarreraJpaController();
+    MateriaJpaController mateJpa = new MateriaJpaController();
 
     public void crearAlumno(Alumno alu) {
         aluJpa.create(alu);
@@ -70,4 +72,33 @@ public class ControladoraPersistencia {
         return carreJpa.findCarreraEntities();
     }
     
+    //Materia
+    public void crearMateria(Materia mate) {
+        mateJpa.create(mate);
+    }
+
+    public void eliminarMateria(int id) {
+        try {
+            mateJpa.destroy(id);
+        } catch (NonexistentEntityException ex) {
+            System.getLogger(ControladoraPersistencia.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
+        }
+    }
+
+    public void editarMateria(Materia mate) {
+        try {
+            mateJpa.edit(mate);
+        } catch (Exception ex) {
+            System.getLogger(ControladoraPersistencia.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
+        }
+    }
+
+    public Materia traerMateria(int id) {
+        return mateJpa.findMateria(id);
+    }
+
+    public List<Materia> traerListaMateria() {
+        return mateJpa.findMateriaEntities();
+    }
+
 }
