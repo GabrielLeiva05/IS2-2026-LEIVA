@@ -30,7 +30,26 @@ const Show = () => {
         getProducts()
     }
     //5 - funcion de configuracion para sweet alert 2
-
+    const confirmDelete = (id) => {
+        MySwal.fire({
+            title: '¿Querés eliminar el producto?',
+            text: "No podrás volver atrás",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Si, eliminar'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                deleteProduct(id)
+                Swal.fire(
+                    'Eliminado',
+                    'Tu producto se ha eliminado',
+                    'success'
+                )
+            }
+        })
+    }
     //6 usamos useEffect
     useEffect( () => {
         getProducts()
@@ -61,7 +80,7 @@ const Show = () => {
                                     <td>{product.stock}</td>
                                     <td>
                                         <Link to={`/edit/${product.id}`}><i className="fa fa-pencil" aria-hidden="true"></i></Link>
-                                        <button onClick={() => deleteProduct(product.id)} className="btn btn-danger"><i className="fa fa-trash" aria-hidden="true"></i></button>
+                                        <button onClick={() => confirmDelete(product.id)} className="btn btn-danger"><i className="fa fa-trash" aria-hidden="true"></i></button>
                                     </td>
                                 </tr>
                             ))}
