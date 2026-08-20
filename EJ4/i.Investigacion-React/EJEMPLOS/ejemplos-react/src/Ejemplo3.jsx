@@ -9,7 +9,7 @@ function Ejemplo3() {
             setHora(new Date())
         }, 1000)
 
-        return () => clearInterval(i)
+        return () => clearInterval(intervalo)
     }, [])
 
     return (
