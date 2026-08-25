@@ -4,24 +4,139 @@
         <title>Resultado</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <style>
+            * {
+                box-sizing: border-box;
+                margin: 0;
+                padding: 0;
+                font-family: Arial, sans-serif;
+            }
+
+            body {
+                min-height: 100vh;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                background: linear-gradient(135deg, #667eea, #764ba2);
+            }
+
+            .contenedor {
+                width: 100%;
+                max-width: 650px;
+                padding: 20px;
+            }
+
+            .resultado {
+                background-color: white;
+                padding: 40px;
+                border-radius: 15px;
+                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            }
+
+            h2 {
+                text-align: center;
+                color: #333;
+                margin-bottom: 30px;
+                font-size: 28px;
+            }
+
+            table {
+                width: 100%;
+                border-collapse: collapse;
+                margin-bottom: 25px;
+                overflow: hidden;
+                border-radius: 8px;
+            }
+
+            th {
+                background: linear-gradient(135deg, #667eea, #764ba2);
+                color: white;
+                padding: 14px;
+                text-align: left;
+            }
+
+            td {
+                padding: 14px;
+                border-bottom: 1px solid #eee;
+                color: #444;
+            }
+
+            tr:last-child td {
+                border-bottom: none;
+            }
+
+            tr:hover td {
+                background-color: #f7f7ff;
+            }
+
+            .tipo-edad {
+                text-align: center;
+                padding: 15px;
+                margin-bottom: 25px;
+                border-radius: 8px;
+                background-color: #f1f3ff;
+                color: #555;
+                font-size: 18px;
+                font-weight: bold;
+            }
+
+            .boton {
+                display: block;
+                width: 100%;
+                padding: 13px;
+                border: none;
+                border-radius: 8px;
+                background: linear-gradient(135deg, #667eea, #764ba2);
+                color: white;
+                font-size: 16px;
+                font-weight: bold;
+                text-align: center;
+                text-decoration: none;
+                cursor: pointer;
+                transition: transform 0.2s ease, box-shadow 0.2s ease;
+            }
+
+            .boton:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+            }
+
+            .boton:active {
+                transform: translateY(0);
+            }
+        </style>
     </head>
+
     <body>
-        <h2>Datos procesados</h2>
-        
-        <table>
-            <tr>
-                <th>Nombre Completo</th>
-                <th>Edad</th>
-                <th>Estado Edad</th>
-            </tr>
-            <tr>
-                <td th:text='${nombreCompleto}'></td>
-                <td th:text='${edad}'></td>
-                <td th:text='${tipoEdad}'></td>
-            </tr>
-        </table>
-        
-        <p th:if='${edad>=18}'>Puede acceder a contenido para mayores de 18.</p>
-        <p th:unless='${edad>=18}'>No puede acceder a contenido para mayores de 18.</p>
+
+        <div class="contenedor">
+
+            <div class="resultado">
+
+                <h2>Datos procesados</h2>
+
+                <table>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Apellido</th>
+                        <th>Edad</th>
+                    </tr>
+
+                    <tr>
+                        <td th:text="${persona.nombre}"></td>
+                        <td th:text="${persona.apellido}"></td>
+                        <td th:text="${persona.edad}"></td>
+                    </tr>
+                </table>
+
+                <p class="tipo-edad" th:text="${tipoEdad}"></p>
+
+                <a href="/" class="boton">Volver al formulario</a>
+
+            </div>
+
+        </div>
+
     </body>
 </html>

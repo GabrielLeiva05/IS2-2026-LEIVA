@@ -4,18 +4,142 @@
         <title>Formulario de personas</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <style>
+            * {
+                box-sizing: border-box;
+                margin: 0;
+                padding: 0;
+                font-family: Arial, sans-serif;
+            }
+
+            body {
+                min-height: 100vh;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                background: linear-gradient(135deg, #667eea, #764ba2);
+            }
+
+            .contenedor {
+                width: 100%;
+                max-width: 450px;
+                padding: 20px;
+            }
+
+            .formulario {
+                background-color: white;
+                padding: 40px;
+                border-radius: 15px;
+                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            }
+
+            h2 {
+                text-align: center;
+                color: #333;
+                margin-bottom: 30px;
+                font-size: 28px;
+            }
+
+            .campo {
+                margin-bottom: 20px;
+            }
+
+            label {
+                display: block;
+                margin-bottom: 8px;
+                color: #444;
+                font-weight: bold;
+                font-size: 14px;
+            }
+
+            input {
+                width: 100%;
+                padding: 12px 15px;
+                border: 1px solid #ddd;
+                border-radius: 8px;
+                font-size: 16px;
+                outline: none;
+                transition: all 0.3s ease;
+            }
+
+            input:focus {
+                border-color: #667eea;
+                box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.15);
+            }
+
+            button {
+                width: 100%;
+                padding: 13px;
+                margin-top: 10px;
+                border: none;
+                border-radius: 8px;
+                background: linear-gradient(135deg, #667eea, #764ba2);
+                color: white;
+                font-size: 16px;
+                font-weight: bold;
+                cursor: pointer;
+                transition: transform 0.2s ease, box-shadow 0.2s ease;
+            }
+
+            button:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+            }
+
+            button:active {
+                transform: translateY(0);
+            }
+        </style>
     </head>
+
     <body>
-        <h2>Ingreso de Datos</h2>
-        <form th:action="@{/procesar}" method="post">
-            <label>Nombre:</label> 
-            <input type="text" name="nombre" required> <br><br>
-            <label>Apellido</label>
-            <input type="text" name="apellido" required> <br><br>
-            <label>Edad</label>
-            <input type="text" name="edad" required> <br><br>
-            
-            <button type='submit'>Enviar</button>
-        </form>
+
+        <div class="contenedor">
+
+            <div class="formulario">
+
+                <h2>Ingreso de Datos</h2>
+
+                <form th:action="@{/procesar}" th:object="${persona}" method="post">
+
+                    <div class="campo">
+                        <label for="nombre">Nombre:</label>
+                        <input th:field="*{nombre}" 
+                               type="text" 
+                               id="nombre"
+                               name="nombre" 
+                               placeholder="Ingrese su nombre"
+                               required>
+                    </div>
+
+                    <div class="campo">
+                        <label for="apellido">Apellido:</label>
+                        <input th:field="*{apellido}" 
+                               type="text" 
+                               id="apellido"
+                               name="apellido" 
+                               placeholder="Ingrese su apellido"
+                               required>
+                    </div>
+
+                    <div class="campo">
+                        <label for="edad">Edad:</label>
+                        <input th:field="*{edad}" 
+                               type="number" 
+                               id="edad"
+                               name="edad" 
+                               placeholder="Ingrese su edad"
+                               required>
+                    </div>
+
+                    <button type="submit">Enviar datos</button>
+
+                </form>
+
+            </div>
+
+        </div>
+
     </body>
 </html>
