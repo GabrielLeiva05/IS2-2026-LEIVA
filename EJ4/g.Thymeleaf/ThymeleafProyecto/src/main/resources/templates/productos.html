@@ -113,13 +113,13 @@
     </head>
 
     <body>
-
+        <div th:replace='~{fragments::header}'></div>
         <div class="contenedor">
 
             <div class="tarjeta">
 
                 <h1>Lista de Productos</h1>
-
+                <div th:insert='~{fragments::msj}'></div>
                 <div class="tabla-contenedor">
 
                     <table>
@@ -151,6 +151,6 @@
             </div>
 
         </div>
-
+        <div th:replace='~{fragments::footer}'></div>
     </body>
 </html>

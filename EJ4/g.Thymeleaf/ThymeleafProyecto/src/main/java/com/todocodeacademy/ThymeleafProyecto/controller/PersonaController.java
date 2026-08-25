@@ -15,7 +15,7 @@ import com.todocodeacademy.ThymeleafProyecto.model.Persona;
 @Controller
 public class PersonaController {
     
-    @GetMapping("/")
+    @GetMapping("/formulario")
     public String mostrarFormulario(Model model) {
         model.addAttribute("persona", new Persona());
         return "formulario";
