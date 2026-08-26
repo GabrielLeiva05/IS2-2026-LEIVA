@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Usuarios')}"></head>
+<body>
+
+<nav th:replace="~{fragments/layout :: navbar('admin-usuarios')}"></nav>
+<div th:replace="~{fragments/layout :: mensajes}"></div>
+
+<section class="section">
+  <div class="container">
+    <div class="row section-header align-items-end">
+      <div class="col-lg-7">
+        <span class="eyebrow">Panel de administración</span>
+        <h2 class="section-title">Usuarios</h2>
+        <p class="section-subtitle">Gestión de cuentas de usuario: bloqueo, desbloqueo y baja.</p>
+      </div>
+    </div>
+
+    <div class="table-responsive rounded-3" style="border: 1px solid var(--n-border);">
+      <table class="table align-middle mb-0">
+        <thead style="background: var(--n-bg-alt);">
+          <tr>
+            <th>Nombre completo</th>
+            <th>Correo</th>
+            <th>Intentos fallidos</th>
+            <th>Estado</th>
+            <th class="text-end">Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr th:each="usuario : ${usuarios}">
+            <td class="fw-semibold text-navy" th:text="${usuario.nombreCompleto}">Nombre Apellido</td>
+            <td class="text-slate" th:text="${usuario.correo}">correo@ejemplo.com</td>
+            <td th:text="${usuario.intentos}">0</td>
+            <td>
+              <span th:if="${usuario.estado.name() == 'ACTIVO'}" class="badge-soft" style="color: var(--n-success);">Activo</span>
+              <span th:if="${usuario.estado.name() == 'BLOQUEADO'}" class="badge-soft" style="color: #B42318;">Bloqueado</span>
+            </td>
+            <td class="text-end">
+              <form th:if="${usuario.estado.name() == 'ACTIVO'}" th:action="@{/admin/usuarios/{id}/bloquear(id=${usuario.id})}" method="post" class="d-inline"
+                    onsubmit="return confirm('¿Bloquear a este usuario?');">
+                <button type="submit" class="btn btn-light-custom btn-sm-custom" style="color:#B42318;">
+                  <i class="bi bi-lock"></i> Bloquear
+                </button>
+              </form>
+              <form th:if="${usuario.estado.name() == 'BLOQUEADO'}" th:action="@{/admin/usuarios/{id}/desbloquear(id=${usuario.id})}" method="post" class="d-inline">
+                <button type="submit" class="btn btn-light-custom btn-sm-custom" style="color: var(--n-success);">
+                  <i class="bi bi-unlock"></i> Desbloquear
+                </button>
+              </form>
+              <form th:action="@{/admin/usuarios/{id}/eliminar(id=${usuario.id})}" method="post" class="d-inline"
+                    onsubmit="return confirm('¿Eliminar definitivamente este usuario?');">
+                <button type="submit" class="btn btn-light-custom btn-sm-custom" style="color:#B42318;">
+                  <i class="bi bi-trash"></i>
+                </button>
+              </form>
+            </td>
+          </tr>
+          <tr th:if="${#lists.isEmpty(usuarios)}">
+            <td colspan="5" class="text-center text-slate py-4">No hay usuarios registrados todavía.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+</body>
+</html>

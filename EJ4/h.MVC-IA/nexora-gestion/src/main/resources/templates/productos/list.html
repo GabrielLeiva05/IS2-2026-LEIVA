@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Productos')}"></head>
+<body>
+
+<nav th:replace="~{fragments/layout :: navbar('admin-productos')}"></nav>
+<div th:replace="~{fragments/layout :: mensajes}"></div>
+
+<section class="section">
+  <div class="container">
+    <div class="row section-header align-items-end">
+      <div class="col-lg-7">
+        <span class="eyebrow">Panel de administración</span>
+        <h2 class="section-title">Productos</h2>
+        <p class="section-subtitle">Alta, edición y baja de productos del catálogo. El stock se gestiona desde Inventario.</p>
+      </div>
+      <div class="col-lg-5 text-lg-end mt-3 mt-lg-0">
+        <a th:href="@{/admin/productos/nuevo}" class="btn btn-primary btn-lg-custom">
+          <i class="bi bi-plus-lg me-1"></i>Nuevo producto
+        </a>
+      </div>
+    </div>
+
+    <div class="table-responsive rounded-3" style="border: 1px solid var(--n-border);">
+      <table class="table align-middle mb-0">
+        <thead style="background: var(--n-bg-alt);">
+          <tr>
+            <th>Nombre</th>
+            <th>Descripción</th>
+            <th>Precio</th>
+            <th>Stock actual</th>
+            <th>Estado</th>
+            <th class="text-end">Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr th:each="producto : ${productos}">
+            <td class="fw-semibold text-navy" th:text="${producto.nombre}">Nombre</td>
+            <td class="text-slate" th:text="${producto.descripcion}">Descripción</td>
+            <td th:text="'$' + ${#numbers.formatDecimal(producto.precio, 1, 2)}">$0.00</td>
+            <td>
+              <span class="badge-soft" th:text="${stockPorProducto.get(producto.id)}">0</span>
+            </td>
+            <td>
+              <span th:if="${producto.activo}" class="badge-soft" style="color: var(--n-success);">Activo</span>
+              <span th:unless="${producto.activo}" class="badge-soft" style="color: #B42318;">Inactivo</span>
+            </td>
+            <td class="text-end">
+              <a th:href="@{/admin/productos/{id}/editar(id=${producto.id})}" class="btn btn-light-custom btn-sm-custom">
+                <i class="bi bi-pencil"></i>
+              </a>
+              <form th:action="@{/admin/productos/{id}/eliminar(id=${producto.id})}" method="post" class="d-inline"
+                    onsubmit="return confirm('¿Confirmás eliminar/dar de baja este producto?');">
+                <button type="submit" class="btn btn-light-custom btn-sm-custom" style="color:#B42318;">
+                  <i class="bi bi-trash"></i>
+                </button>
+              </form>
+            </td>
+          </tr>
+          <tr th:if="${#lists.isEmpty(productos)}">
+            <td colspan="6" class="text-center text-slate py-4">No hay productos cargados todavía.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+</body>
+</html>

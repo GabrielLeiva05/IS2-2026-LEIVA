@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Producto')}"></head>
+<body>
+
+<nav th:replace="~{fragments/layout :: navbar('admin-productos')}"></nav>
+<div th:replace="~{fragments/layout :: mensajes}"></div>
+
+<section class="section">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-lg-7">
+        <div class="p-4 p-md-5 rounded-3" style="background: var(--n-white); box-shadow: var(--n-shadow-md); border: 1px solid var(--n-border);">
+          <span class="eyebrow">Panel de administración</span>
+          <h2 class="section-title mb-4" th:text="${productoForm.id == null} ? 'Nuevo producto' : 'Editar producto'">Producto</h2>
+
+          <!--
+            th:object vincula el formulario al DTO ProductoForm. El campo
+            "id" viaja oculto: si viene null, ProductoController.guardar()
+            interpreta que es un ALTA (registrarProducto); si viene con
+            valor, interpreta que es una EDICIÓN (editarProducto).
+          -->
+          <form th:action="@{/admin/productos/guardar}" th:object="${productoForm}" method="post">
+            <input type="hidden" th:field="*{id}">
+
+            <div class="mb-3">
+              <label class="form-label fw-semibold text-navy">Nombre</label>
+              <input type="text" class="form-control" th:field="*{nombre}" placeholder="Nombre del producto">
+              <div class="text-danger small mt-1" th:if="${#fields.hasErrors('nombre')}" th:errors="*{nombre}"></div>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label fw-semibold text-navy">Descripción</label>
+              <textarea class="form-control" th:field="*{descripcion}" rows="3" placeholder="Descripción del producto"></textarea>
+            </div>
+
+            <div class="mb-4">
+              <label class="form-label fw-semibold text-navy">Precio</label>
+              <input type="number" step="0.01" class="form-control" th:field="*{precio}" placeholder="0.00">
+              <div class="text-danger small mt-1" th:if="${#fields.hasErrors('precio')}" th:errors="*{precio}"></div>
+            </div>
+
+            <div class="d-flex gap-2">
+              <button type="submit" class="btn btn-primary btn-lg-custom">Guardar</button>
+              <a th:href="@{/admin/productos}" class="btn btn-light-custom btn-lg-custom">Cancelar</a>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+</body>
+</html>

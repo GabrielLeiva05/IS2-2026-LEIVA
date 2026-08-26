@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Mis compras')}"></head>
+<body>
+
+<nav th:replace="~{fragments/layout :: navbar('historial')}"></nav>
+<div th:replace="~{fragments/layout :: mensajes}"></div>
+
+<section class="section">
+  <div class="container">
+    <div class="row section-header align-items-end">
+      <div class="col-lg-7">
+        <span class="eyebrow">Compras</span>
+        <h2 class="section-title">Mi historial de compras</h2>
+        <p class="section-subtitle">Podés anular una compra: el stock de sus productos se repone automáticamente.</p>
+      </div>
+    </div>
+
+    <div class="row g-4">
+      <div class="col-12" th:each="compra : ${compras}">
+        <div class="p-4 rounded-3" style="background: var(--n-white); box-shadow: var(--n-shadow-sm); border: 1px solid var(--n-border);">
+          <div class="d-flex flex-wrap justify-content-between align-items-center mb-3">
+            <div>
+              <span class="fw-semibold text-navy">Compra #<span th:text="${compra.id}">1</span></span>
+              <span class="text-slate ms-2" th:text="${#temporals.format(compra.fechaCompra, 'dd/MM/yyyy HH:mm')}">01/01/2026</span>
+            </div>
+            <div class="d-flex align-items-center gap-3">
+              <span th:if="${compra.anulada}" class="badge-soft" style="color:#B42318;">Anulada</span>
+              <span th:unless="${compra.anulada}" class="badge-soft" style="color: var(--n-success);">Confirmada</span>
+              <span class="fw-bold font-display text-navy" th:text="'$' + ${#numbers.formatDecimal(compra.precioTotal, 1, 2)}">$0.00</span>
+            </div>
+          </div>
+
+          <ul class="mb-3">
+            <li class="text-slate" th:each="detalle : ${compra.detalles}"
+                th:text="${detalle.cantidad} + ' x ' + ${detalle.producto.nombre} + ' — $' + ${#numbers.formatDecimal(detalle.subtotal, 1, 2)}">
+              1 x Producto — $0.00
+            </li>
+          </ul>
+
+          <form th:if="${!compra.anulada}" th:action="@{/compras/{id}/anular(id=${compra.id})}" method="post"
+                onsubmit="return confirm('¿Anular esta compra? El stock será repuesto.');">
+            <button type="submit" class="btn btn-light-custom btn-sm-custom" style="color:#B42318;">
+              <i class="bi bi-x-circle me-1"></i>Anular compra
+            </button>
+          </form>
+        </div>
+      </div>
+
+      <div class="col-12" th:if="${#lists.isEmpty(compras)}">
+        <p class="text-slate">Todavía no registraste ninguna compra. <a th:href="@{/compras/carrito}">Ir al carrito</a>.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+</body>
+</html>
