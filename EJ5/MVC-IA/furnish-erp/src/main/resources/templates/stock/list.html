@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout/base :: head(titulo='Stock')}"></head>
+<body>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-lg-2 col-md-3 px-0" th:replace="~{layout/base :: sidebar(activo='stock')}"></div>
+        <div class="col-lg-10 col-md-9 px-0">
+            <div th:replace="~{layout/base :: topbar(titulo='Stock')}"></div>
+            <div th:replace="~{layout/base :: flash}"></div>
+
+            <div class="p-4">
+                <div class="d-flex justify-content-end mb-3">
+                    <a th:href="@{/stock/ajuste}" class="btn btn-primary btn-sm">
+                        <i class="bi bi-arrow-left-right"></i> Registrar ajuste manual
+                    </a>
+                </div>
+
+                <div class="table-responsive card border-0 shadow-sm">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead>
+                        <tr>
+                            <th>Producto</th>
+                            <th>Marca</th>
+                            <th>Categoría</th>
+                            <th>Stock actual</th>
+                            <th class="text-end">Historial</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="p : ${productos}">
+                            <td th:text="${p.nombre}">Producto</td>
+                            <td th:text="${p.marca}">Marca</td>
+                            <td th:text="${p.categoria}">Categoría</td>
+                            <td>
+                                <span class="badge bg-dark fs-6" th:text="${stockPorProducto.get(p.id)}">0</span>
+                            </td>
+                            <td class="text-end">
+                                <a th:href="@{/stock/historial/{id}(id=${p.id})}" class="btn btn-sm btn-outline-dark">
+                                    <i class="bi bi-clock-history"></i> Ver historial
+                                </a>
+                            </td>
+                        </tr>
+                        <tr th:if="${#lists.isEmpty(productos)}">
+                            <td colspan="5" class="text-center text-muted py-4">No hay productos cargados.</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div th:replace="~{layout/base :: scripts}"></div>
+</body>
+</html>

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout/base :: head(titulo='Producto')}"></head>
+<body>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-lg-2 col-md-3 px-0" th:replace="~{layout/base :: sidebar(activo='productos')}"></div>
+        <div class="col-lg-10 col-md-9 px-0">
+            <div th:replace="~{layout/base :: topbar(titulo=${producto.id} != null ? 'Editar producto' : 'Nuevo producto')}"></div>
+
+            <div class="p-4">
+                <div class="card border-0 shadow-sm" style="max-width:640px;">
+                    <div class="card-body">
+                        <form th:action="@{/productos/guardar}" th:object="${producto}" method="post">
+                            <input type="hidden" th:field="*{id}"/>
+
+                            <div class="mb-3">
+                                <label class="form-label">Nombre</label>
+                                <input type="text" class="form-control" th:field="*{nombre}"
+                                       th:classappend="${#fields.hasErrors('nombre')} ? 'is-invalid'"/>
+                                <div class="invalid-feedback" th:errors="*{nombre}"></div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">Descripción</label>
+                                <textarea class="form-control" rows="3" th:field="*{descripcion}"></textarea>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Marca</label>
+                                    <input type="text" class="form-control" th:field="*{marca}"
+                                           th:classappend="${#fields.hasErrors('marca')} ? 'is-invalid'"/>
+                                    <div class="invalid-feedback" th:errors="*{marca}"></div>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Categoría</label>
+                                    <input type="text" class="form-control" th:field="*{categoria}"
+                                           th:classappend="${#fields.hasErrors('categoria')} ? 'is-invalid'"/>
+                                    <div class="invalid-feedback" th:errors="*{categoria}"></div>
+                                </div>
+                            </div>
+
+                            <button type="submit" class="btn btn-primary">
+                                <i class="bi bi-check-lg"></i> Guardar
+                            </button>
+                            <a th:href="@{/productos}" class="btn btn-outline-secondary">Cancelar</a>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div th:replace="~{layout/base :: scripts}"></div>
+</body>
+</html>

@@ -1,0 +1,11 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout/base :: head(titulo='No encontrado')}"></head>
+<body class="d-flex align-items-center justify-content-center" style="min-height:100vh;">
+<div class="text-center">
+    <h1 class="display-4 fw-bold">404</h1>
+    <p class="text-muted" th:text="${mensaje} ?: 'El recurso solicitado no existe.'">No encontrado</p>
+    <a th:href="@{/dashboard}" class="btn btn-primary btn-sm">Volver al inicio</a>
+</div>
+</body>
+</html>

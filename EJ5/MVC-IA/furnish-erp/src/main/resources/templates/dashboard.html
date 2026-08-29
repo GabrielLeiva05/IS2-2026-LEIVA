@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{layout/base :: head(titulo='Dashboard')}"></head>
+<body>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-lg-2 col-md-3 px-0" th:replace="~{layout/base :: sidebar(activo='dashboard')}"></div>
+        <div class="col-lg-10 col-md-9 px-0">
+            <div th:replace="~{layout/base :: topbar(titulo='Dashboard')}"></div>
+
+            <div class="p-4">
+                <div class="row g-3">
+                    <div class="col-md-3">
+                        <div class="card kpi-card p-3">
+                            <div class="kpi-label">Empleados activos</div>
+                            <div class="kpi-value" th:text="${cantidadEmpleados}">0</div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card kpi-card p-3">
+                            <div class="kpi-label">Proveedores activos</div>
+                            <div class="kpi-value" th:text="${cantidadProveedores}">0</div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card kpi-card p-3">
+                            <div class="kpi-label">Productos activos</div>
+                            <div class="kpi-value" th:text="${cantidadProductos}">0</div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card kpi-card p-3">
+                            <div class="kpi-label">Órdenes pendientes</div>
+                            <div class="kpi-value" th:text="${ordenesPendientes}">0</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row g-3 mt-1">
+                    <div class="col-md-6">
+                        <div class="card border-0 shadow-sm">
+                            <div class="card-body">
+                                <h6 class="card-title">Accesos rápidos</h6>
+                                <div class="d-flex flex-wrap gap-2 mt-3">
+                                    <a th:href="@{/ordenes/nueva}" class="btn btn-primary btn-sm">
+                                        <i class="bi bi-plus-lg"></i> Nueva orden de compra
+                                    </a>
+                                    <a th:href="@{/productos/nuevo}" class="btn btn-outline-dark btn-sm">
+                                        <i class="bi bi-plus-lg"></i> Cargar producto
+                                    </a>
+                                    <a th:href="@{/stock/ajuste}" class="btn btn-outline-dark btn-sm">
+                                        <i class="bi bi-plus-lg"></i> Ajuste de stock
+                                    </a>
+                                    <a th:href="@{/empleados/nuevo}" class="btn btn-outline-dark btn-sm" sec:authorize="hasRole('ADMIN')">
+                                        <i class="bi bi-plus-lg"></i> Nuevo empleado
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card border-0 shadow-sm">
+                            <div class="card-body">
+                                <h6 class="card-title">Estado de órdenes de compra</h6>
+                                <p class="mb-1">Pendientes: <strong th:text="${ordenesPendientes}">0</strong></p>
+                                <p class="mb-0">Aprobadas (esperando recepción): <strong th:text="${ordenesAprobadas}">0</strong></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div th:replace="~{layout/base :: scripts}"></div>
+</body>
+</html>

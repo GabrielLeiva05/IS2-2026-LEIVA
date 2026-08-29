@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout/base :: head(titulo='Empleados')}"></head>
+<body>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-lg-2 col-md-3 px-0" th:replace="~{layout/base :: sidebar(activo='empleados')}"></div>
+        <div class="col-lg-10 col-md-9 px-0">
+            <div th:replace="~{layout/base :: topbar(titulo='Empleados')}"></div>
+            <div th:replace="~{layout/base :: flash}"></div>
+
+            <div class="p-4">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <span class="text-muted small" th:text="${#lists.size(empleados)} + ' empleado(s) activo(s)'"></span>
+                    <a th:href="@{/empleados/nuevo}" class="btn btn-primary btn-sm">
+                        <i class="bi bi-plus-lg"></i> Nuevo empleado
+                    </a>
+                </div>
+
+                <div class="table-responsive card border-0 shadow-sm">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Nombre</th>
+                            <th>DNI</th>
+                            <th>Correo</th>
+                            <th>Cargo</th>
+                            <th class="text-end">Acciones</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="e : ${empleados}">
+                            <td th:text="${e.idEmpleado}">1</td>
+                            <td th:text="${e.nombre}">Nombre</td>
+                            <td th:text="${e.dni}">0</td>
+                            <td th:text="${e.correo}">correo@mail.com</td>
+                            <td th:text="${e.cargo}">Cargo</td>
+                            <td class="text-end">
+                                <a th:href="@{/empleados/editar/{id}(id=${e.idEmpleado})}" class="btn btn-sm btn-outline-dark">
+                                    <i class="bi bi-pencil"></i>
+                                </a>
+                                <form th:action="@{/empleados/eliminar/{id}(id=${e.idEmpleado})}" method="post" class="d-inline"
+                                      th:attr="onsubmit=|return confirm('¿Eliminar al empleado &quot;${e.nombre}&quot;?');|">
+                                    <button type="submit" class="btn btn-sm btn-outline-danger">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                        <tr th:if="${#lists.isEmpty(empleados)}">
+                            <td colspan="6" class="text-center text-muted py-4">No hay empleados cargados.</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div th:replace="~{layout/base :: scripts}"></div>
+</body>
+</html>

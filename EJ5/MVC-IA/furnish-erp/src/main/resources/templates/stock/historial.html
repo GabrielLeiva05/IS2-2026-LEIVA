@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout/base :: head(titulo='Historial de stock')}"></head>
+<body>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-lg-2 col-md-3 px-0" th:replace="~{layout/base :: sidebar(activo='stock')}"></div>
+        <div class="col-lg-10 col-md-9 px-0">
+            <div th:replace="~{layout/base :: topbar(titulo='Historial de stock: ' + ${producto.nombre})}"></div>
+
+            <div class="p-4">
+                <div class="card kpi-card p-3 mb-3" style="max-width:280px;">
+                    <div class="kpi-label">Stock actual</div>
+                    <div class="kpi-value" th:text="${stockActual}">0</div>
+                </div>
+
+                <div class="table-responsive card border-0 shadow-sm">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead>
+                        <tr>
+                            <th>Fecha</th>
+                            <th>Tipo</th>
+                            <th>Cantidad</th>
+                            <th>Stock resultante</th>
+                            <th>Origen</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="m : ${movimientos}">
+                            <td th:text="${#temporals.format(m.fecha, 'dd/MM/yyyy HH:mm')}">01/01/2026</td>
+                            <td>
+                                <span class="badge" th:classappend="'badge-tipo-' + ${m.tipoMovimiento}" th:text="${m.tipoMovimiento}">ENTRADA</span>
+                            </td>
+                            <td th:text="${m.cantidad}">0</td>
+                            <td th:text="${m.stockActual}">0</td>
+                            <td>
+                                <span th:if="${m.detalleOrden != null}"
+                                      th:text="'Orden de compra #' + ${m.detalleOrden.ordenCompra.idOrdenCompra}">Orden #1</span>
+                                <span th:if="${m.detalleOrden == null}" class="text-muted">Ajuste manual</span>
+                            </td>
+                        </tr>
+                        <tr th:if="${#lists.isEmpty(movimientos)}">
+                            <td colspan="5" class="text-center text-muted py-4">Este producto todavía no registra movimientos.</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <a th:href="@{/stock}" class="btn btn-outline-secondary btn-sm mt-3">
+                    <i class="bi bi-arrow-left"></i> Volver
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+<div th:replace="~{layout/base :: scripts}"></div>
+</body>
+</html>

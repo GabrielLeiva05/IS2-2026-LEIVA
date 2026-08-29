@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout/base :: head(titulo='Ajuste de stock')}"></head>
+<body>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-lg-2 col-md-3 px-0" th:replace="~{layout/base :: sidebar(activo='stock')}"></div>
+        <div class="col-lg-10 col-md-9 px-0">
+            <div th:replace="~{layout/base :: topbar(titulo='Registrar ajuste manual de stock')}"></div>
+
+            <div class="p-4">
+                <div class="alert alert-info small">
+                    Use esta pantalla solo para ajustes que <strong>no</strong> provienen de una
+                    Orden de Compra (por ejemplo: mermas, roturas, conteos de inventario o carga
+                    de stock inicial de un producto nuevo).
+                </div>
+
+                <div class="card border-0 shadow-sm" style="max-width:520px;">
+                    <div class="card-body">
+                        <form th:action="@{/stock/ajuste}" th:object="${movimiento}" method="post">
+                            <div class="mb-3">
+                                <label class="form-label">Producto</label>
+                                <select class="form-select" th:field="*{idProducto}"
+                                        th:classappend="${#fields.hasErrors('idProducto')} ? 'is-invalid'">
+                                    <option value="">-- Seleccionar --</option>
+                                    <option th:each="p : ${productos}" th:value="${p.id}" th:text="${p.nombre}"></option>
+                                </select>
+                                <div class="invalid-feedback" th:errors="*{idProducto}"></div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">Tipo de movimiento</label>
+                                <select class="form-select" th:field="*{tipoMovimiento}"
+                                        th:classappend="${#fields.hasErrors('tipoMovimiento')} ? 'is-invalid'">
+                                    <option value="">-- Seleccionar --</option>
+                                    <option value="ENTRADA">Entrada (incrementa stock)</option>
+                                    <option value="SALIDA">Salida (disminuye stock)</option>
+                                </select>
+                                <div class="invalid-feedback" th:errors="*{tipoMovimiento}"></div>
+                            </div>
+
+                            <div class="mb-4">
+                                <label class="form-label">Cantidad</label>
+                                <input type="number" min="1" class="form-control" th:field="*{cantidad}"
+                                       th:classappend="${#fields.hasErrors('cantidad')} ? 'is-invalid'"/>
+                                <div class="invalid-feedback" th:errors="*{cantidad}"></div>
+                            </div>
+
+                            <button type="submit" class="btn btn-primary">
+                                <i class="bi bi-check-lg"></i> Registrar movimiento
+                            </button>
+                            <a th:href="@{/stock}" class="btn btn-outline-secondary">Cancelar</a>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div th:replace="~{layout/base :: scripts}"></div>
+</body>
+</html>

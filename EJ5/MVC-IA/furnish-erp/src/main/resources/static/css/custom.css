@@ -1,0 +1,183 @@
+/* ============================================================================
+   custom.css
+   ============================================================================
+   Hoja de estilos propia del panel de administración "Furnish ERP".
+   Los colores y la tipografía se adaptaron de la plantilla de diseño
+   "Furnish" (Bootstrap eCommerce template) provista por el cliente:
+     - Negro (#000) como color primario -> navbar, botones principales.
+     - Naranja (#d47f31) como color secundario -> acentos, estados, activos.
+     - Tipografía Poppins (Google Fonts), igual que el template original.
+   Se usa Bootstrap 5.3 vía CDN como base y se sobrescriben acá los
+   componentes necesarios para respetar la paleta de la plantilla, ya que
+   recompilar el Bootstrap con SASS (como hace el template original con sus
+   variables _variables.scss) no aplica a esta app server-side.
+   ============================================================================ */
+
+:root {
+  --furnish-black: #000000;
+  --furnish-orange: #d47f31;
+  --furnish-gray-50: #f6f5f4;
+  --furnish-gray-100: #ecebe9;
+  --furnish-gray-200: #dad7d2;
+  --furnish-gray-700: #615b51;
+  --furnish-gray-900: #211f1c;
+}
+
+body {
+  font-family: 'Poppins', sans-serif;
+  background-color: var(--furnish-gray-50);
+  color: var(--furnish-gray-900);
+}
+
+/* ---------- Navbar / Topbar ---------- */
+.navbar-custom {
+  background-color: #ffffff;
+  border-bottom: 1px solid var(--furnish-gray-100);
+}
+
+.brand-furnish {
+  text-transform: uppercase;
+  letter-spacing: .12rem;
+  font-weight: 700;
+  font-size: .78rem;
+  line-height: 1.1;
+  color: var(--furnish-black);
+}
+
+.brand-furnish small {
+  display: block;
+  font-weight: 400;
+  letter-spacing: normal;
+  text-transform: none;
+  color: var(--furnish-gray-700);
+}
+
+/* ---------- Sidebar ---------- */
+.sidebar {
+  background-color: var(--furnish-black);
+  min-height: 100vh;
+  padding-top: 1.5rem;
+}
+
+.sidebar .nav-link {
+  color: rgba(255, 255, 255, .75);
+  padding: .65rem 1.25rem;
+  border-left: 3px solid transparent;
+  font-size: .92rem;
+  display: flex;
+  align-items: center;
+  gap: .6rem;
+}
+
+.sidebar .nav-link:hover {
+  color: #fff;
+  background-color: rgba(255, 255, 255, .06);
+}
+
+.sidebar .nav-link.active {
+  color: #fff;
+  border-left-color: var(--furnish-orange);
+  background-color: rgba(212, 127, 49, .15);
+  font-weight: 600;
+}
+
+.sidebar .sidebar-heading {
+  color: rgba(255, 255, 255, .4);
+  font-size: .72rem;
+  text-transform: uppercase;
+  letter-spacing: .08rem;
+  padding: 1rem 1.25rem .35rem;
+}
+
+/* ---------- Botones (paleta primaria negra / secundaria naranja) ---------- */
+.btn-primary {
+  --bs-btn-bg: var(--furnish-black);
+  --bs-btn-border-color: var(--furnish-black);
+  --bs-btn-hover-bg: #262626;
+  --bs-btn-hover-border-color: #262626;
+  --bs-btn-active-bg: #000;
+  --bs-btn-active-border-color: #000;
+}
+
+.btn-secondary,
+.btn-outline-secondary:hover {
+  --bs-btn-bg: var(--furnish-orange);
+  --bs-btn-border-color: var(--furnish-orange);
+  --bs-btn-color: #fff;
+  --bs-btn-hover-bg: #b8691f;
+  --bs-btn-hover-border-color: #b8691f;
+}
+
+.text-secondary-furnish { color: var(--furnish-orange) !important; }
+.bg-secondary-furnish { background-color: var(--furnish-orange) !important; }
+
+/* ---------- Tarjetas de indicadores (dashboard) ---------- */
+.kpi-card {
+  border: none;
+  border-radius: .5rem;
+  border-left: 4px solid var(--furnish-orange);
+  background: #fff;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, .06);
+}
+
+.kpi-card .kpi-value {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--furnish-black);
+}
+
+.kpi-card .kpi-label {
+  color: var(--furnish-gray-700);
+  font-size: .85rem;
+  text-transform: uppercase;
+  letter-spacing: .04rem;
+}
+
+/* ---------- Tablas y badges de estado ---------- */
+.table thead th {
+  background-color: var(--furnish-gray-100);
+  border-bottom: none;
+  font-size: .8rem;
+  text-transform: uppercase;
+  letter-spacing: .03rem;
+  color: var(--furnish-gray-700);
+}
+
+.badge-estado-PENDIENTE { background-color: #a0988d; }
+.badge-estado-APROBADA  { background-color: #0d6efd; }
+.badge-estado-RECIBIDA  { background-color: #198754; }
+.badge-estado-CANCELADA { background-color: #dc3545; }
+
+.badge-tipo-ENTRADA { background-color: #198754; }
+.badge-tipo-SALIDA  { background-color: #dc3545; }
+
+/* ---------- Login ---------- */
+.login-wrapper {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--furnish-black);
+}
+
+.login-card {
+  background: #fff;
+  border-radius: .5rem;
+  padding: 2.5rem;
+  width: 100%;
+  max-width: 400px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, .25);
+}
+
+.login-brand {
+  text-align: center;
+  margin-bottom: 1.75rem;
+}
+
+.login-brand .accent {
+  color: var(--furnish-orange);
+  font-style: italic;
+}
+
+a { color: var(--furnish-black); }
+a:hover { color: var(--furnish-orange); }
