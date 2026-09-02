@@ -1,12 +1,27 @@
 import logo from '../assets/img/logo.png';
+import { Routes, Route, Link } from 'react-router-dom';
+import Contenido from './Contenido';
+import Preventa from './Preventa';
+import Aspirantes from './Aspirantes';
+import Profesiones from './Profesiones';
 
 function Menu() {
+    const profesiones = [
+        {id: 1, nombre: 'Desarrollador Web'},
+        {id: 2, nombre: 'Mecánico'},
+        {id: 3, nombre: 'Profesor'},
+        {id: 4, nombre: 'Abogado'}
+    ]
+
     return (
         <>
             <header className="menu-wrap">
                 <figure className="user">
                     <div className="user-avatar">
-                        <img  className="w-100" src={logo} alt="Cedavilu Web Academy" />
+                        <Link to='/'>
+                            <img  className="w-100" src={logo} alt="Cedavilu Web Academy" />
+                        </Link>
+                        
                     </div>
                     <figcaption>
                         Cedavilu Web Academy
@@ -17,39 +32,46 @@ function Menu() {
                         <h3>Opciones</h3>
                         <ul>
                             <li>
-                                <a href="#">
+                                <Link to="/empresa">
                                     <i className="bi bi-building" style={{fontSize: "1.2rem", color: "cornflowerblue"}}></i>
                                     - Empresas
-                                </a>
+                                </Link>
                             </li>
                             <li>
-                                <a href="#">
+                                <Link to="/aspirantes">
                                     <i className="bi bi-person" style={{fontSize: "1.2rem", color: "cornflowerblue"}}></i>
-                                    - Personas
-                                </a>
+                                    - Aspirantes
+                                </Link>
                             </li>
                             <li>
-                                <a href="#">
+                                <Link to="/profesiones">
                                     <i className="bi bi-list-check"></i>
                                     - Profesiones
-                                </a>
+                                </Link>
                             </li>
                             <li>
-                                <a href="#">
+                                <Link to="#">
                                     <i className="bi bi-person-vcard" style={{fontSize: "1.2rem", color: "cornflowerblue"}}></i>
                                     - Postulate aquí
-                                </a>
+                                </Link>
                             </li>
                             <li>
-                                <a href="#">
+                                <Link to="#">
                                     <i className="bi bi-chat-left-text"></i>
                                     - Contacto
-                                </a>
+                                </Link>
                             </li>
                         </ul>
                     </section>
                 </nav>
             </header>
+            {/** Creamos el enrutamiento */}
+            <Routes>
+                <Route path='/' element={<Contenido />} />
+                <Route path='/empresa' element={<Preventa />} />
+                <Route path='/aspirantes' element={<Aspirantes />} />
+                <Route path='/profesiones' element={<Profesiones listado={profesiones} />} />
+            </Routes>
         </>
     )
 }

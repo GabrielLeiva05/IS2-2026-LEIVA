@@ -1,4 +1,4 @@
-function Profesiones() {
+function Profesiones({listado}) {
     return (
         <>
             <section className="content">
@@ -8,16 +8,16 @@ function Profesiones() {
 						aria-current="true">
 						Listado de Profesiones
 					</h4>
-					<button type="button" className="list-group-item list-group-item-action text-center">Abogado</button>
-					<button type="button" className="list-group-item list-group-item-action text-center">Arquitecto</button>
-					<button type="button" className="list-group-item list-group-item-action text-center">Botánico</button>
-					<button type="button"
-						className="list-group-item list-group-item-action text-center">Computista</button>
-					<button type="button" className="list-group-item list-group-item-action text-center">Economista</button>
-					<button type="button" className="list-group-item list-group-item-action text-center">Técnico de sonido</button>
-					<button type="button" className="list-group-item list-group-item-action text-center">Profesor</button>
-					<button type="button" className="list-group-item list-group-item-action text-center">Linguista</button>
-				</div>
+					{listado.map(prof => (
+                            <button 
+                                type="button" 
+                                className="list-group-item list-group-item-action text-center"
+                                key={prof.id}>
+                                    {prof.nombre}
+                            </button>
+                        ))
+                    }
+                </div>
 			</section>
         </>
     )

@@ -8,7 +8,6 @@ function Contenido() {
             <main className="content-wrap">
                 <Preventa />
                 <Aspirantes />
-                <Profesiones />
             </main>
         </>
     )
