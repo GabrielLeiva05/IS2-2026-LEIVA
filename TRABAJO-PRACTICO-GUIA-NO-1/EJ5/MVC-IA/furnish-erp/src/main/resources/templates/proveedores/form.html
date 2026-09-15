@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout/base :: head(titulo='Proveedor')}"></head>
+<body>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-lg-2 col-md-3 px-0" th:replace="~{layout/base :: sidebar(activo='proveedores')}"></div>
+        <div class="col-lg-10 col-md-9 px-0">
+            <div th:replace="~{layout/base :: topbar(titulo=${proveedor.idProveedor} != null ? 'Editar proveedor' : 'Nuevo proveedor')}"></div>
+
+            <div class="p-4">
+                <div class="card border-0 shadow-sm" style="max-width:640px;">
+                    <div class="card-body">
+                        <form th:action="@{/proveedores/guardar}" th:object="${proveedor}" method="post">
+                            <input type="hidden" th:field="*{idProveedor}"/>
+
+                            <div class="mb-3">
+                                <label class="form-label">Nombre / Razón social</label>
+                                <input type="text" class="form-control" th:field="*{nombre}"
+                                       th:classappend="${#fields.hasErrors('nombre')} ? 'is-invalid'"/>
+                                <div class="invalid-feedback" th:errors="*{nombre}"></div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">Teléfono</label>
+                                <input type="number" class="form-control" th:field="*{telefono}"
+                                       th:classappend="${#fields.hasErrors('telefono')} ? 'is-invalid'"/>
+                                <div class="invalid-feedback" th:errors="*{telefono}"></div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">Dirección</label>
+                                <input type="text" class="form-control" th:field="*{direccion}"
+                                       th:classappend="${#fields.hasErrors('direccion')} ? 'is-invalid'"/>
+                                <div class="invalid-feedback" th:errors="*{direccion}"></div>
+                            </div>
+
+                            <div class="mb-4">
+                                <label class="form-label">Correo</label>
+                                <input type="email" class="form-control" th:field="*{correo}"
+                                       th:classappend="${#fields.hasErrors('correo')} ? 'is-invalid'"/>
+                                <div class="invalid-feedback" th:errors="*{correo}"></div>
+                            </div>
+
+                            <button type="submit" class="btn btn-primary">
+                                <i class="bi bi-check-lg"></i> Guardar
+                            </button>
+                            <a th:href="@{/proveedores}" class="btn btn-outline-secondary">Cancelar</a>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div th:replace="~{layout/base :: scripts}"></div>
+</body>
+</html>

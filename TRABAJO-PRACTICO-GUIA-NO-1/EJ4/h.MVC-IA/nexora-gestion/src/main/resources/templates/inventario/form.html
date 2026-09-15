@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Registrar movimiento')}"></head>
+<body>
+
+<nav th:replace="~{fragments/layout :: navbar('admin-inventario')}"></nav>
+<div th:replace="~{fragments/layout :: mensajes}"></div>
+
+<section class="section">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-lg-7">
+        <div class="p-4 p-md-5 rounded-3" style="background: var(--n-white); box-shadow: var(--n-shadow-md); border: 1px solid var(--n-border);">
+          <span class="eyebrow">Panel de administración</span>
+          <h2 class="section-title mb-4">Registrar entrada de stock</h2>
+
+          <div class="alert alert-danger" th:if="${mensajeError != null}" th:text="${mensajeError}">Error</div>
+
+          <!--
+            Este formulario siempre registra movimientos de tipo ENTRADA
+            (reposición de stock por parte del administrador). Los
+            movimientos de tipo SALIDA se generan automáticamente y de
+            forma transaccional desde CompraServiceImpl cuando un Usuario
+            agrega un producto a su carrito (ver disminuirInventario() en
+            el diagrama UML) — por eso no existe un formulario manual de
+            "salida" en la vista.
+          -->
+          <form th:action="@{/admin/inventario/guardar}" th:object="${movimientoForm}" method="post">
+
+            <div class="mb-3">
+              <label class="form-label fw-semibold text-navy">Producto</label>
+              <select class="form-select" th:field="*{productoId}">
+                <option value="">Seleccioná un producto</option>
+                <option th:each="p : ${productos}" th:value="${p.id}" th:text="${p.nombre}">Producto</option>
+              </select>
+              <div class="text-danger small mt-1" th:if="${#fields.hasErrors('productoId')}" th:errors="*{productoId}"></div>
+            </div>
+
+            <div class="mb-4">
+              <label class="form-label fw-semibold text-navy">Cantidad a ingresar</label>
+              <input type="number" min="1" class="form-control" th:field="*{cantidad}" placeholder="0">
+              <div class="text-danger small mt-1" th:if="${#fields.hasErrors('cantidad')}" th:errors="*{cantidad}"></div>
+            </div>
+
+            <div class="d-flex gap-2">
+              <button type="submit" class="btn btn-primary btn-lg-custom">Registrar movimiento</button>
+              <a th:href="@{/admin/inventario}" class="btn btn-light-custom btn-lg-custom">Cancelar</a>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+</body>
+</html>

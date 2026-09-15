@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ============================================================================
+  POM.XML - Descriptor de proyecto Maven
+  ============================================================================
+  Este archivo define las dependencias, el plugin de empaquetado y la
+  configuración general del proyecto. Se apoya en "spring-boot-starter-parent"
+  que resuelve automáticamente versiones compatibles entre sí (evita
+  conflictos de versiones entre Spring, Hibernate, Tomcat embebido, etc.)
+  ============================================================================
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <!-- Herencia del POM padre de Spring Boot: trae el "dependencyManagement"
+         con versiones ya probadas entre sí. -->
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>3.3.4</version>
+        <relativePath/>
+    </parent>
+
+    <groupId>com.nexora</groupId>
+    <artifactId>nexora-gestion</artifactId>
+    <version>1.0.0</version>
+    <name>nexora-gestion</name>
+    <description>
+        Sistema de Gestion de Usuarios, Productos, Inventario y Compras.
+        Arquitectura MVC (Modelo - Vista - Controlador) con Spring Boot,
+        Spring Data JPA (ORM sobre MySQL) y Thymeleaf como motor de vistas.
+    </description>
+
+    <properties>
+        <java.version>17</java.version>
+    </properties>
+
+    <dependencies>
+
+        <!-- ================================================================
+             CAPA WEB / CONTROLADOR (Controller)
+             Incluye Spring MVC, Tomcat embebido y Jackson.
+             Es la base para poder crear @Controller y exponer rutas HTTP.
+             ================================================================ -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+
+        <!-- ================================================================
+             CAPA VISTA (View) - Thymeleaf
+             Motor de plantillas server-side. Permite generar HTML dinámico
+             a partir de los "Model" que los controladores le pasan a la vista.
+             ================================================================ -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-thymeleaf</artifactId>
+        </dependency>
+
+        <!-- ================================================================
+             CAPA MODELO / PERSISTENCIA - Spring Data JPA (ORM)
+             Provee Hibernate como implementación de JPA para mapear las
+             clases Java (entidades) a tablas de la base de datos relacional,
+             y las interfaces "Repository" para el acceso a datos.
+             ================================================================ -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-jpa</artifactId>
+        </dependency>
+
+        <!-- Driver JDBC de MySQL: permite que Hibernate/JPA se conecte
+             físicamente a una base de datos MySQL. -->
+        <dependency>
+            <groupId>com.mysql</groupId>
+            <artifactId>mysql-connector-j</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+
+        <!-- Módulo liviano de Spring Security SOLO para criptografía
+             (BCryptPasswordEncoder). Se usa exclusivamente para "hashear"
+             contraseñas de forma segura antes de guardarlas en la base de
+             datos. A propósito NO se agrega "spring-boot-starter-security"
+             completo, porque este proyecto maneja la autenticación con un
+             flujo propio basado en sesión HTTP (HttpSession) + interceptor,
+             conforme a las reglas de negocio de Usuario/Administrador
+             definidas en el diagrama UML (iniciarSesion, bloquear, etc.),
+             en lugar de delegar en la cadena de filtros de Spring Security. -->
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-crypto</artifactId>
+        </dependency>
+
+        <!-- Validaciones declarativas (Bean Validation / Jakarta Validation):
+             @NotNull, @Email, @Size, etc. sobre los DTOs de formularios,
+             usados por los Controllers antes de invocar a los Services. -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-validation</artifactId>
+        </dependency>
+
+        <!-- NOTA: este proyecto NO usa Lombok. Todos los getters/setters/
+             constructores de entidades y DTOs se escriben explícitamente en
+             el código fuente, precisamente para que el proyecto compile de
+             forma 100% predecible en cualquier máquina/IDE, sin depender de
+             que el "annotation processor" de Lombok esté correctamente
+             configurado en el entorno de cada desarrollador. -->
+
+        <!-- DevTools: recarga automática en desarrollo (no se incluye en el
+             artefacto final que se distribuye a producción). -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-devtools</artifactId>
+            <scope>runtime</scope>
+            <optional>true</optional>
+        </dependency>
+
+        <!-- Dependencias de testing (JUnit 5, Mockito, Spring Test). -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+    </dependencies>
+
+    <build>
+        <finalName>nexora-gestion</finalName>
+        <plugins>
+            <!-- Plugin que empaqueta la app como JAR ejecutable
+                 (con servidor Tomcat embebido incluido). -->
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout/base :: head(titulo='Usuario')}"></head>
+<body>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-lg-2 col-md-3 px-0" th:replace="~{layout/base :: sidebar(activo='usuarios')}"></div>
+        <div class="col-lg-10 col-md-9 px-0">
+            <div th:replace="~{layout/base :: topbar(titulo=${usuarioForm.idUsuario} != null ? 'Editar usuario' : 'Nuevo usuario')}"></div>
+
+            <div class="p-4">
+                <div class="card border-0 shadow-sm" style="max-width:520px;">
+                    <div class="card-body">
+                        <form th:action="@{/usuarios/guardar}" th:object="${usuarioForm}" method="post">
+                            <input type="hidden" th:field="*{idUsuario}"/>
+
+                            <div class="mb-3">
+                                <label class="form-label">Nombre de usuario</label>
+                                <input type="text" class="form-control" th:field="*{username}"
+                                       th:classappend="${#fields.hasErrors('username')} ? 'is-invalid'"/>
+                                <div class="invalid-feedback" th:errors="*{username}"></div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">Contraseña</label>
+                                <input type="password" class="form-control" th:field="*{password}"
+                                       th:placeholder="${usuarioForm.idUsuario} != null ? 'Dejar vacío para no modificarla' : ''"/>
+                                <div class="form-text" th:if="${usuarioForm.idUsuario} != null">
+                                    Dejar en blanco para mantener la contraseña actual.
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">Rol</label>
+                                <select class="form-select" th:field="*{rol}"
+                                        th:classappend="${#fields.hasErrors('rol')} ? 'is-invalid'">
+                                    <option value="">-- Seleccionar --</option>
+                                    <option value="ADMIN">ADMIN</option>
+                                    <option value="EMPLEADO">EMPLEADO</option>
+                                </select>
+                                <div class="invalid-feedback" th:errors="*{rol}"></div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">Empleado vinculado (opcional)</label>
+                                <select class="form-select" th:field="*{idEmpleado}">
+                                    <option value="">-- Ninguno --</option>
+                                    <option th:each="e : ${empleados}" th:value="${e.idEmpleado}" th:text="${e.nombre}"></option>
+                                </select>
+                            </div>
+
+                            <div class="form-check mb-4">
+                                <input type="checkbox" class="form-check-input" th:field="*{habilitado}"/>
+                                <label class="form-check-label">Usuario habilitado</label>
+                            </div>
+
+                            <button type="submit" class="btn btn-primary">
+                                <i class="bi bi-check-lg"></i> Guardar
+                            </button>
+                            <a th:href="@{/usuarios}" class="btn btn-outline-secondary">Cancelar</a>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div th:replace="~{layout/base :: scripts}"></div>
+</body>
+</html>

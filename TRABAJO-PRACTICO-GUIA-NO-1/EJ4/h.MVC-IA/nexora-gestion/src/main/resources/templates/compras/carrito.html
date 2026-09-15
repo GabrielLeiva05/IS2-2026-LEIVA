@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Mi carrito')}"></head>
+<body>
+
+<nav th:replace="~{fragments/layout :: navbar('carrito')}"></nav>
+<div th:replace="~{fragments/layout :: mensajes}"></div>
+
+<section class="section">
+  <div class="container">
+    <div class="row section-header align-items-end">
+      <div class="col-lg-7">
+        <span class="eyebrow">Compras</span>
+        <h2 class="section-title">Mi carrito</h2>
+        <p class="section-subtitle">Agregá productos y confirmá tu compra cuando estés listo.</p>
+      </div>
+    </div>
+
+    <div class="row g-4">
+
+      <!-- Selector de productos para agregar -->
+      <div class="col-lg-7">
+        <div class="p-4 rounded-3 h-100" style="background: var(--n-white); box-shadow: var(--n-shadow-sm); border: 1px solid var(--n-border);">
+          <h5 class="text-navy mb-3">Agregar producto</h5>
+
+          <!--
+            Este formulario llama a POST /compras/agregar, que en el
+            Controller invoca CompraService.agregarDetalle(...). Esa
+            llamada valida stock (InventarioService) y recalcula el total
+            de la compra dentro de una única transacción.
+          -->
+          <form th:action="@{/compras/agregar}" method="post" class="row g-3">
+            <div class="col-8">
+              <label class="form-label fw-semibold text-navy">Producto</label>
+              <select class="form-select" name="productoId" required>
+                <option value="">Seleccioná un producto</option>
+                <option th:each="p : ${productos}" th:value="${p.id}"
+                        th:text="${p.nombre} + ' — $' + ${#numbers.formatDecimal(p.precio, 1, 2)}">Producto</option>
+              </select>
+            </div>
+            <div class="col-4">
+              <label class="form-label fw-semibold text-navy">Cantidad</label>
+              <input type="number" name="cantidad" min="1" value="1" class="form-control" required>
+            </div>
+            <div class="col-12">
+              <button type="submit" class="btn btn-primary btn-lg-custom w-100">
+                <i class="bi bi-cart-plus me-1"></i>Agregar al carrito
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <!-- Resumen del carrito actual -->
+      <div class="col-lg-5">
+        <div class="p-4 rounded-3 h-100" style="background: var(--n-navy); color:#fff;">
+          <h5 class="mb-3" style="color:#fff;">Resumen</h5>
+
+          <div class="d-flex justify-content-between mb-2" th:each="detalle : ${compra.detalles}">
+            <span class="text-white-50" th:text="${detalle.cantidad} + ' x ' + ${detalle.producto.nombre}">1 x Producto</span>
+            <span th:text="'$' + ${#numbers.formatDecimal(detalle.subtotal, 1, 2)}">$0.00</span>
+          </div>
+          <p class="text-white-50 mb-3" th:if="${#lists.isEmpty(compra.detalles)}">Tu carrito está vacío.</p>
+
+          <hr style="border-color: rgba(255,255,255,0.15);">
+
+          <div class="d-flex justify-content-between mb-4">
+            <span class="fw-semibold">Total</span>
+            <span class="fw-bold font-display" th:text="'$' + ${#numbers.formatDecimal(compra.precioTotal, 1, 2)}">$0.00</span>
+          </div>
+
+          <form th:action="@{/compras/confirmar}" method="post">
+            <button type="submit" class="btn btn-primary btn-lg-custom w-100" th:disabled="${#lists.isEmpty(compra.detalles)}">
+              Confirmar compra <i class="bi bi-check2 ms-1"></i>
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+</body>
+</html>

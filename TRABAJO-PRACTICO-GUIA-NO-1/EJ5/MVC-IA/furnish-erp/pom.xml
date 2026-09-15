@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ==========================================================================
+  POM.XML - Descriptor de Maven del proyecto
+  ==========================================================================
+  Este proyecto sigue la arquitectura MVC (Modelo-Vista-Controlador) con
+  Spring Boot + Thymeleaf + Spring Data JPA (ORM) + MySQL + Spring Security.
+
+  Capas del proyecto (paquete base: com.furnish.erp):
+    - domain      -> Entidades JPA (Modelo / capa de persistencia)
+    - repository  -> Interfaces Spring Data JPA (acceso a datos, ORM)
+    - service     -> Reglas de negocio (ÚNICA capa autorizada a manejarlas)
+    - controller  -> Controladores Spring MVC (capa Controlador)
+    - templates   -> Vistas Thymeleaf (capa Vista)
+    - dto         -> Objetos de transferencia usados por los formularios
+    - config      -> Configuración de Spring (seguridad, carga de datos)
+    - exception   -> Excepciones de negocio y manejador global de errores
+  ==========================================================================
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <!-- Spring Boot Parent: provee la gestión de versiones (dependencyManagement)
+         para todas las librerías del ecosistema Spring. -->
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>3.3.4</version>
+        <relativePath/>
+    </parent>
+
+    <groupId>com.furnish</groupId>
+    <artifactId>erp</artifactId>
+    <version>1.0.0</version>
+    <name>furnish-erp</name>
+    <description>
+        Sistema de Gestion de Compras, Proveedores, Empleados, Productos y Stock
+        (Furnish ERP) - Arquitectura MVC con Spring Boot + Thymeleaf + JPA/MySQL.
+    </description>
+    <packaging>jar</packaging>
+
+    <properties>
+        <java.version>21</java.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <!-- Se fija explícitamente la versión de Lombok (en vez de dejar que
+             la herede del BOM de Spring Boot) para poder referenciarla desde
+             el <annotationProcessorPath> del compiler-plugin más abajo. -->
+        <lombok.version>1.18.46</lombok.version>
+    </properties>
+
+    <dependencies>
+        <!-- ==================================================================
+             CAPA VISTA (V): Thymeleaf - motor de plantillas server-side que
+             renderiza HTML dinámico a partir de los "Model" que le pasan los
+             controladores (th:text, th:each, th:if, fragmentos, etc.)
+             ================================================================== -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-thymeleaf</artifactId>
+        </dependency>
+
+        <!-- ==================================================================
+             CAPA CONTROLADOR (C): Spring MVC + servidor embebido Tomcat.
+             Provee @Controller, @RequestMapping, DispatcherServlet, etc.
+             ================================================================== -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+
+        <!-- ==================================================================
+             CAPA MODELO / ORM: Spring Data JPA (Hibernate por debajo) para
+             mapear las entidades del diagrama de clases a tablas MySQL.
+             ================================================================== -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-jpa</artifactId>
+        </dependency>
+
+        <!-- Driver JDBC de MySQL, usado por Hibernate para conectarse a la BD. -->
+        <dependency>
+            <groupId>com.mysql</groupId>
+            <artifactId>mysql-connector-j</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+
+        <!-- ==================================================================
+             SEGURIDAD: login con usuario y contraseña (form login), hashing
+             de contraseñas con BCrypt, control de acceso por rol (@PreAuthorize,
+             HttpSecurity), protección CSRF, etc.
+             ================================================================== -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
+        </dependency>
+
+        <!-- Integra las etiquetas sec:authorize / sec:authentication de
+             Spring Security dentro de las plantillas Thymeleaf. -->
+        <dependency>
+            <groupId>org.thymeleaf.extras</groupId>
+            <artifactId>thymeleaf-extras-springsecurity6</artifactId>
+        </dependency>
+
+        <!-- Bean Validation (Jakarta Validation / Hibernate Validator) para
+             validar los formularios y DTOs con @NotBlank, @NotNull, @Email, etc. -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-validation</artifactId>
+        </dependency>
+
+        <!-- Lombok: genera en tiempo de compilación getters/setters/constructores
+             (@Getter, @Setter, @NoArgsConstructor, @AllArgsConstructor, @Builder)
+             para reducir el código repetitivo (boilerplate) de las entidades y DTOs. -->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>${lombok.version}</version>
+            <optional>true</optional>
+        </dependency>
+
+        <!-- Utilidades para desarrollo: reinicio automático de la app al
+             detectar cambios en el classpath (no se empaqueta en producción). -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-devtools</artifactId>
+            <scope>runtime</scope>
+            <optional>true</optional>
+        </dependency>
+
+        <!-- Dependencias de testing: JUnit 5, Mockito, Spring Test, etc. -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- Permite testear reglas de seguridad (login, roles) en tests de integración. -->
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <finalName>furnish-erp</finalName>
+        <plugins>
+            <!-- ==================================================================
+                 IMPORTANTE: se declara explícitamente Lombok como
+                 "annotation processor" del compilador. En algunos entornos
+                 (Maven Wrapper/versión de Maven, caché local de .m2, IDEs)
+                 el compilador NO detecta automáticamente el procesador de
+                 anotaciones de Lombok con solo tenerlo como <dependency>,
+                 lo que provoca errores "cannot find symbol" sobre TODOS los
+                 getters/setters/builders generados por Lombok. Declarar el
+                 <annotationProcessorPath> fuerza a Maven a ejecutarlo sí o sí,
+                 independientemente del entorno/SO donde se compile.
+                 ================================================================== -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <annotationProcessorPaths>
+                        <path>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok</artifactId>
+                            <version>${lombok.version}</version>
+                        </path>
+                    </annotationProcessorPaths>
+                </configuration>
+            </plugin>
+
+            <!-- Empaqueta la aplicación como JAR ejecutable ("fat jar") con
+                 un servidor Tomcat embebido: java -jar furnish-erp.jar -->
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <excludes>
+                        <exclude>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok</artifactId>
+                        </exclude>
+                    </excludes>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>

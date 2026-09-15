@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout/base :: head(titulo='Proveedores')}"></head>
+<body>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-lg-2 col-md-3 px-0" th:replace="~{layout/base :: sidebar(activo='proveedores')}"></div>
+        <div class="col-lg-10 col-md-9 px-0">
+            <div th:replace="~{layout/base :: topbar(titulo='Proveedores')}"></div>
+            <div th:replace="~{layout/base :: flash}"></div>
+
+            <div class="p-4">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <span class="text-muted small" th:text="${#lists.size(proveedores)} + ' proveedor(es) activo(s)'"></span>
+                    <a th:href="@{/proveedores/nuevo}" class="btn btn-primary btn-sm">
+                        <i class="bi bi-plus-lg"></i> Nuevo proveedor
+                    </a>
+                </div>
+
+                <div class="table-responsive card border-0 shadow-sm">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Nombre / Razón social</th>
+                            <th>Teléfono</th>
+                            <th>Dirección</th>
+                            <th>Correo</th>
+                            <th class="text-end">Acciones</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="p : ${proveedores}">
+                            <td th:text="${p.idProveedor}">1</td>
+                            <td th:text="${p.nombre}">Proveedor</td>
+                            <td th:text="${p.telefono}">0</td>
+                            <td th:text="${p.direccion}">Dirección</td>
+                            <td th:text="${p.correo}">correo@mail.com</td>
+                            <td class="text-end">
+                                <a th:href="@{/proveedores/editar/{id}(id=${p.idProveedor})}" class="btn btn-sm btn-outline-dark">
+                                    <i class="bi bi-pencil"></i>
+                                </a>
+                                <form th:action="@{/proveedores/eliminar/{id}(id=${p.idProveedor})}" method="post" class="d-inline"
+                                      th:attr="onsubmit=|return confirm('¿Eliminar al proveedor &quot;${p.nombre}&quot;?');|">
+                                    <button type="submit" class="btn btn-sm btn-outline-danger">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                        <tr th:if="${#lists.isEmpty(proveedores)}">
+                            <td colspan="6" class="text-center text-muted py-4">No hay proveedores cargados.</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div th:replace="~{layout/base :: scripts}"></div>
+</body>
+</html>

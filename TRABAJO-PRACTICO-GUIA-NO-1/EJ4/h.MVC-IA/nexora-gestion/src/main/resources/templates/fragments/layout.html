@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<!--
+  ============================================================================
+  FRAGMENTO "layout.html" (Capa de Vista — Thymeleaf)
+  ============================================================================
+  Este archivo NO es una página completa: es un contenedor de FRAGMENTOS
+  reutilizables (th:fragment) que las demás plantillas insertan con
+  th:replace="fragments/layout :: head" / ":: navbar" / ":: footer".
+  Esto evita duplicar el <head>, la barra de navegación y el footer en cada
+  una de las ~12 páginas de la aplicación (principio DRY aplicado a vistas).
+
+  El diseño visual (colores, tipografías, componentes) proviene íntegramente
+  de la plantilla Bootstrap 5 "Nexora" provista, reutilizando su hoja de
+  estilos /css/custom.css sin modificarla, y adaptando el marcado de la
+  navbar/footer originales a las rutas reales de esta aplicación Spring MVC.
+  ============================================================================
+-->
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:fragment="head(titulo)">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title th:text="${titulo} + ' — Nexora Gestión'">Nexora Gestión</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Sora:wght@400;600;700;800&amp;display=swap" rel="stylesheet">
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+  <!-- th:href resuelve el context-path automáticamente; apunta a
+       src/main/resources/static/css/custom.css (servido por Spring Boot
+       como recurso estático). -->
+  <link th:href="@{/css/custom.css}" rel="stylesheet">
+</head>
+<body>
+
+<!--
+  NAVBAR (fragmento con parámetro "activePage" para resaltar el link activo)
+  Muestra distintas opciones según el tipo de cuenta en sesión:
+   - Sin sesión: Inicio, Iniciar sesión, Registrarme.
+   - Usuario:    Inicio, Mi Carrito, Mis Compras, Cerrar sesión.
+   - Administrador: Productos, Inventario, Usuarios, Cerrar sesión.
+  "sessionNombre" y "sessionTipo" llegan al Model automáticamente gracias a
+  SesionModelAdvice (@ControllerAdvice), sin que cada Controller tenga que
+  agregarlos manualmente.
+-->
+<nav th:fragment="navbar(activePage)" class="navbar navbar-expand-lg navbar-nexora fixed-top">
+  <div class="container">
+    <a class="navbar-brand navbar-brand-custom" th:href="@{/}">Nexora<span>.</span></a>
+    <button class="navbar-toggler navbar-toggler-custom" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav" aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="bar"></span><span class="bar"></span><span class="bar"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="mainNav">
+      <ul class="navbar-nav ms-auto align-items-lg-center gap-1 mt-3 mt-lg-0">
+
+        <li class="nav-item">
+          <a class="nav-link nav2" th:classappend="${activePage == 'home'} ? ' active'" th:href="@{/}">Inicio</a>
+        </li>
+
+        <!-- Opciones exclusivas de USUARIO -->
+        <th:block th:if="${sessionTipo == 'USUARIO'}">
+          <li class="nav-item">
+            <a class="nav-link nav2" th:classappend="${activePage == 'carrito'} ? ' active'" th:href="@{/compras/carrito}">
+              <i class="bi bi-cart3 me-1"></i>Mi Carrito
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link nav2" th:classappend="${activePage == 'historial'} ? ' active'" th:href="@{/compras/historial}">
+              <i class="bi bi-receipt me-1"></i>Mis Compras
+            </a>
+          </li>
+        </th:block>
+
+        <!-- Opciones exclusivas de ADMINISTRADOR -->
+        <th:block th:if="${sessionTipo == 'ADMINISTRADOR'}">
+          <li class="nav-item">
+            <a class="nav-link nav2" th:classappend="${activePage == 'admin-productos'} ? ' active'" th:href="@{/admin/productos}">
+              <i class="bi bi-box-seam me-1"></i>Productos
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link nav2" th:classappend="${activePage == 'admin-inventario'} ? ' active'" th:href="@{/admin/inventario}">
+              <i class="bi bi-clipboard-data me-1"></i>Inventario
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link nav2" th:classappend="${activePage == 'admin-usuarios'} ? ' active'" th:href="@{/admin/usuarios}">
+              <i class="bi bi-people me-1"></i>Usuarios
+            </a>
+          </li>
+        </th:block>
+
+        <!-- Sesión activa: saludo + cerrar sesión -->
+        <li class="nav-item ms-lg-2 mt-2 mt-lg-0" th:if="${sessionNombre != null}">
+          <span class="nav-link nav2" style="opacity:.7;" th:text="'Hola, ' + ${sessionNombre}">Hola, Usuario</span>
+        </li>
+        <li class="nav-item mt-2 mt-lg-0" th:if="${sessionNombre != null}">
+          <a th:href="@{/logout}" class="btn btn-light-custom btn-sm-custom w-100">Cerrar sesión</a>
+        </li>
+
+        <!-- Sin sesión: login / registro -->
+        <li class="nav-item mt-2 mt-lg-0" th:if="${sessionNombre == null}">
+          <a th:href="@{/login}" class="btn btn-light-custom btn-sm-custom w-100">Iniciar sesión</a>
+        </li>
+        <li class="nav-item ms-lg-2 mt-2 mt-lg-0" th:if="${sessionNombre == null}">
+          <a th:href="@{/registro}" class="btn btn-primary btn-sm-custom w-100">Registrarme</a>
+        </li>
+
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!--
+  Fragmento de alertas reutilizable: cada vista lo inserta justo debajo del
+  navbar. Lee "mensajeExito" / "mensajeError" del Model (seteados por los
+  Controllers, muchas veces vía RedirectAttributes.addFlashAttribute, para
+  que el mensaje sobreviva a un redirect "Post/Redirect/Get").
+-->
+<div th:fragment="mensajes" class="container" style="padding-top: 110px;">
+  <div class="alert alert-success d-flex align-items-center gap-2" role="alert" th:if="${mensajeExito != null}">
+    <i class="bi bi-check-circle-fill"></i>
+    <span th:text="${mensajeExito}">Operación exitosa.</span>
+  </div>
+  <div class="alert alert-danger d-flex align-items-center gap-2" role="alert" th:if="${mensajeError != null}">
+    <i class="bi bi-exclamation-triangle-fill"></i>
+    <span th:text="${mensajeError}">Ocurrió un error.</span>
+  </div>
+</div>
+
+<footer th:fragment="footer" class="footer-nexora">
+  <div class="container">
+    <div class="row gy-4">
+      <div class="col-lg-6 col-md-6">
+        <a class="navbar-brand-custom d-inline-block mb-3" th:href="@{/}" style="color:#fff !important;">Nexora<span style="color:var(--n-primary)">.</span></a>
+        <p class="text-white-50 mb-2" style="max-width:420px;">
+          Sistema de gestión de usuarios, productos, inventario y compras.
+          Proyecto académico construido con Spring Boot (MVC), Spring Data JPA
+          (ORM sobre MySQL) y Thymeleaf.
+        </p>
+      </div>
+      <div class="col-lg-3 col-md-6 col-6">
+        <h6>Navegación</h6>
+        <a th:href="@{/}">Inicio</a>
+        <a th:href="@{/login}">Iniciar sesión</a>
+        <a th:href="@{/registro}">Crear cuenta</a>
+      </div>
+      <div class="col-lg-3 col-md-6 col-6">
+        <h6>Stack técnico</h6>
+        <span class="d-block text-white-50">Spring Boot 3 · Spring MVC</span>
+        <span class="d-block text-white-50">Spring Data JPA (Hibernate)</span>
+        <span class="d-block text-white-50">MySQL · Thymeleaf</span>
+      </div>
+    </div>
+    <div class="footer-bottom d-flex flex-column flex-md-row justify-content-between align-items-center gap-2 text-center text-md-start">
+      <p class="mb-0">&copy; 2026 Nexora Gestión — Proyecto académico (base visual: plantilla "Nexora" de ThemeWagon).</p>
+    </div>
+  </div>
+</footer>
+
+<button class="back-to-top" aria-label="Back to top"><i class="bi bi-arrow-up"></i></button>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script th:src="@{/js/main.js}"></script>
+</body>
+</html>

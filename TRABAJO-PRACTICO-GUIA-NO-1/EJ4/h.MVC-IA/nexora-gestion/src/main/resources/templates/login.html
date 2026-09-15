@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Iniciar sesión')}"></head>
+<body>
+
+<nav th:replace="~{fragments/layout :: navbar('login')}"></nav>
+<div th:replace="~{fragments/layout :: mensajes}"></div>
+
+<section class="section bg-soft" style="min-height: 60vh;">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-lg-5 col-md-8">
+        <div class="p-4 p-md-5 rounded-3" style="background: var(--n-white); box-shadow: var(--n-shadow-md); border: 1px solid var(--n-border);">
+          <span class="eyebrow">Bienvenido de nuevo</span>
+          <h2 class="section-title mb-4">Iniciar sesión</h2>
+
+          <!-- Mensaje de error de negocio (credenciales inválidas / usuario bloqueado) -->
+          <div class="alert alert-danger" th:if="${mensajeError != null}" th:text="${mensajeError}">Error</div>
+          <div class="alert alert-success" th:if="${mensajeExito != null}" th:text="${mensajeExito}">Éxito</div>
+
+          <!--
+            th:object vincula el formulario al DTO "loginForm" (LoginForm.java).
+            th:action apunta al mismo endpoint que procesa el POST /login.
+            th:field="*{...}" hace el data-binding bidireccional campo <-> DTO.
+          -->
+          <form th:action="@{/login}" th:object="${loginForm}" method="post" class="needs-validation" novalidate>
+
+            <div class="mb-3">
+              <label class="form-label fw-semibold text-navy">Tipo de cuenta</label>
+              <select class="form-select" th:field="*{tipoCuenta}">
+                <option value="USUARIO">Usuario</option>
+                <option value="ADMINISTRADOR">Administrador</option>
+              </select>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label fw-semibold text-navy">Correo electrónico</label>
+              <input type="email" class="form-control" th:field="*{correo}" placeholder="tu@correo.com">
+              <div class="text-danger small mt-1" th:if="${#fields.hasErrors('correo')}" th:errors="*{correo}"></div>
+            </div>
+
+            <div class="mb-4">
+              <label class="form-label fw-semibold text-navy">Contraseña</label>
+              <input type="password" class="form-control" th:field="*{password}" placeholder="••••••••">
+              <div class="text-danger small mt-1" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></div>
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-lg-custom w-100">Ingresar</button>
+          </form>
+
+          <p class="text-center text-slate mt-4 mb-0">
+            ¿No tenés cuenta? <a th:href="@{/registro}" class="fw-semibold">Registrate acá</a>
+          </p>
+          <p class="text-center text-slate small mt-2 mb-0">
+            Demo administrador: <code>admin@nexora.com</code> / <code>Admin123!</code>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+</body>
+</html>

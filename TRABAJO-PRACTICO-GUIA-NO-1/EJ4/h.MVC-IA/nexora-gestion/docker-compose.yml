@@ -1,0 +1,27 @@
+# ==============================================================================
+# docker-compose.yml — Base de datos MySQL para desarrollo local
+# ==============================================================================
+# Este archivo NO es parte del código Java: es una herramienta de
+# infraestructura para levantar rápidamente una instancia de MySQL 8 en tu
+# máquina, con el usuario/base de datos ya coincidentes con
+# application.properties, sin tener que instalar MySQL manualmente.
+#
+# Uso: correr "docker compose up -d" en esta carpeta (ver README.md).
+# ==============================================================================
+services:
+  mysql:
+    image: mysql:latest
+    container_name: nexora-mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: nexora_gestion
+      MYSQL_USER: nexora
+      MYSQL_PASSWORD: nexora
+    ports:
+      - "3306:3306"
+    volumes:
+      - nexora_mysql_data:/var/lib/mysql
+
+volumes:
+  nexora_mysql_data:

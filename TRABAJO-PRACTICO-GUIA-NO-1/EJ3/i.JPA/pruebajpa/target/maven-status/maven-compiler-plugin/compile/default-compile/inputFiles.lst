@@ -1,0 +1,12 @@
+C:\Users\gabri\Desktop\workspace\Facultad\6to-semestre\IS2\EJERCITACION\REPO-INDIVIDUAL\EJ3\pruebajpa\src\main\java\com\mycompany\pruebajpa\logica\Alumno.java
+C:\Users\gabri\Desktop\workspace\Facultad\6to-semestre\IS2\EJERCITACION\REPO-INDIVIDUAL\EJ3\pruebajpa\src\main\java\com\mycompany\pruebajpa\logica\Carrera.java
+C:\Users\gabri\Desktop\workspace\Facultad\6to-semestre\IS2\EJERCITACION\REPO-INDIVIDUAL\EJ3\pruebajpa\src\main\java\com\mycompany\pruebajpa\logica\Controladora.java
+C:\Users\gabri\Desktop\workspace\Facultad\6to-semestre\IS2\EJERCITACION\REPO-INDIVIDUAL\EJ3\pruebajpa\src\main\java\com\mycompany\pruebajpa\logica\Materia.java
+C:\Users\gabri\Desktop\workspace\Facultad\6to-semestre\IS2\EJERCITACION\REPO-INDIVIDUAL\EJ3\pruebajpa\src\main\java\com\mycompany\pruebajpa\persistencia\AlumnoJpaController.java
+C:\Users\gabri\Desktop\workspace\Facultad\6to-semestre\IS2\EJERCITACION\REPO-INDIVIDUAL\EJ3\pruebajpa\src\main\java\com\mycompany\pruebajpa\persistencia\CarreraJpaController.java
+C:\Users\gabri\Desktop\workspace\Facultad\6to-semestre\IS2\EJERCITACION\REPO-INDIVIDUAL\EJ3\pruebajpa\src\main\java\com\mycompany\pruebajpa\persistencia\ControladoraPersistencia.java
+C:\Users\gabri\Desktop\workspace\Facultad\6to-semestre\IS2\EJERCITACION\REPO-INDIVIDUAL\EJ3\pruebajpa\src\main\java\com\mycompany\pruebajpa\persistencia\exceptions\IllegalOrphanException.java
+C:\Users\gabri\Desktop\workspace\Facultad\6to-semestre\IS2\EJERCITACION\REPO-INDIVIDUAL\EJ3\pruebajpa\src\main\java\com\mycompany\pruebajpa\persistencia\exceptions\NonexistentEntityException.java
+C:\Users\gabri\Desktop\workspace\Facultad\6to-semestre\IS2\EJERCITACION\REPO-INDIVIDUAL\EJ3\pruebajpa\src\main\java\com\mycompany\pruebajpa\persistencia\exceptions\PreexistingEntityException.java
+C:\Users\gabri\Desktop\workspace\Facultad\6to-semestre\IS2\EJERCITACION\REPO-INDIVIDUAL\EJ3\pruebajpa\src\main\java\com\mycompany\pruebajpa\persistencia\MateriaJpaController.java
+C:\Users\gabri\Desktop\workspace\Facultad\6to-semestre\IS2\EJERCITACION\REPO-INDIVIDUAL\EJ3\pruebajpa\src\main\java\com\mycompany\pruebajpa\Pruebajpa.java

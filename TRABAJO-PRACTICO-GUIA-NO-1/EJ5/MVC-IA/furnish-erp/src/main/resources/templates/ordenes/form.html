@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<!--
+  ============================================================================
+  ordenes/form.html - Alta de una nueva Orden de Compra
+  ============================================================================
+  El formulario está ligado (th:object) al DTO OrdenCompraForm, que contiene
+  una lista de DetalleOrdenForm. Para que Spring MVC pueda "bindear" (asociar
+  automáticamente) una lista de objetos recibida por POST, cada input debe
+  nombrarse con el patrón "detalles[INDICE].campo" (ej: detalles[0].idProducto,
+  detalles[1].cantidadProducto, etc.). Por eso el JavaScript de más abajo, al
+  agregar una fila nueva, reemplaza un placeholder __INDEX__ por el índice
+  numérico correspondiente antes de insertarla en el DOM.
+  ============================================================================
+-->
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout/base :: head(titulo='Nueva Orden de Compra')}"></head>
+<body>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-lg-2 col-md-3 px-0" th:replace="~{layout/base :: sidebar(activo='ordenes')}"></div>
+        <div class="col-lg-10 col-md-9 px-0">
+            <div th:replace="~{layout/base :: topbar(titulo='Nueva Orden de Compra')}"></div>
+
+            <div class="p-4">
+                <form th:action="@{/ordenes/guardar}" th:object="${ordenForm}" method="post">
+
+                    <!--/* IMPORTANTE: los bloques que usan el objeto utilitario
+                         #fields SOLO pueden evaluarse DENTRO del alcance de un
+                         <form th:object="...">; fuera de ese alcance, Thymeleaf
+                         no tiene un "target" de binding y lanza una excepción
+                         (IllegalStateException: Cannot get selection target)
+                         incluso sin errores de validación presentes. */-->
+                    <div th:if="${#fields.hasErrors('detalles')}" class="alert alert-danger">
+                        <span th:each="err : ${#fields.errors('detalles')}" th:text="${err}"></span>
+                    </div>
+                    <div th:if="${#fields.hasGlobalErrors()}" class="alert alert-danger">
+                        <span th:each="err : ${#fields.globalErrors()}" th:text="${err}"></span>
+                    </div>
+
+                    <div class="card border-0 shadow-sm mb-3">
+                        <div class="card-body">
+                            <h6 class="card-title mb-3">Datos de la orden</h6>
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Empleado que registra</label>
+                                    <select class="form-select" th:field="*{idEmpleado}">
+                                        <option value="">-- Seleccionar --</option>
+                                        <option th:each="e : ${empleados}" th:value="${e.idEmpleado}" th:text="${e.nombre}"></option>
+                                    </select>
+                                    <div class="text-danger small" th:if="${#fields.hasErrors('idEmpleado')}" th:errors="*{idEmpleado}"></div>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Proveedor</label>
+                                    <select class="form-select" th:field="*{idProveedor}">
+                                        <option value="">-- Seleccionar --</option>
+                                        <option th:each="p : ${proveedores}" th:value="${p.idProveedor}" th:text="${p.nombre}"></option>
+                                    </select>
+                                    <div class="text-danger small" th:if="${#fields.hasErrors('idProveedor')}" th:errors="*{idProveedor}"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card border-0 shadow-sm">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <h6 class="card-title mb-0">Productos de la orden</h6>
+                                <button type="button" id="btnAgregarFila" class="btn btn-sm btn-outline-dark">
+                                    <i class="bi bi-plus-lg"></i> Agregar producto
+                                </button>
+                            </div>
+
+                            <table class="table align-middle" id="tablaDetalles">
+                                <thead>
+                                <tr>
+                                    <th style="width:45%">Producto</th>
+                                    <th style="width:20%">Cantidad</th>
+                                    <th style="width:25%">Precio unitario</th>
+                                    <th style="width:10%"></th>
+                                </tr>
+                                </thead>
+                                <tbody id="detallesBody">
+                                <tr th:each="det, iterStat : *{detalles}" class="fila-detalle">
+                                    <td>
+                                        <select class="form-select" th:field="*{detalles[__${iterStat.index}__].idProducto}">
+                                            <option value="">-- Producto --</option>
+                                            <option th:each="p : ${productos}" th:value="${p.id}" th:text="${p.nombre}"></option>
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <input type="number" min="1" class="form-control"
+                                               th:field="*{detalles[__${iterStat.index}__].cantidadProducto}"/>
+                                    </td>
+                                    <td>
+                                        <input type="number" min="0" step="0.01" class="form-control"
+                                               th:field="*{detalles[__${iterStat.index}__].precioUnitario}"/>
+                                    </td>
+                                    <td class="text-center">
+                                        <button type="button" class="btn btn-sm btn-outline-danger btn-quitar-fila">
+                                            <i class="bi bi-x-lg"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="mt-3">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="bi bi-check-lg"></i> Registrar orden de compra
+                        </button>
+                        <a th:href="@{/ordenes}" class="btn btn-outline-secondary">Cancelar</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--/* Fila "plantilla" oculta, usada por JS como base para clonar nuevas
+     filas. Nótese __INDEX__ como placeholder de texto plano (no es
+     sintaxis Thymeleaf) que el script reemplaza por el índice real. */-->
+<table style="display:none;">
+    <tbody>
+    <tr id="filaPlantilla" class="fila-detalle">
+        <td>
+            <select class="form-select" name="detalles[__INDEX__].idProducto">
+                <option value="">-- Producto --</option>
+                <option th:each="p : ${productos}" th:value="${p.id}" th:text="${p.nombre}"></option>
+            </select>
+        </td>
+        <td><input type="number" min="1" class="form-control" name="detalles[__INDEX__].cantidadProducto"/></td>
+        <td><input type="number" min="0" step="0.01" class="form-control" name="detalles[__INDEX__].precioUnitario"/></td>
+        <td class="text-center">
+            <button type="button" class="btn btn-sm btn-outline-danger btn-quitar-fila"><i class="bi bi-x-lg"></i></button>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+<div th:replace="~{layout/base :: scripts}"></div>
+<script th:inline="javascript">
+    // Índice inicial = cantidad de filas ya renderizadas por el servidor.
+    let indiceFila = document.querySelectorAll('#detallesBody .fila-detalle').length;
+
+    document.getElementById('btnAgregarFila').addEventListener('click', function () {
+        const plantilla = document.getElementById('filaPlantilla');
+        const nuevaFila = plantilla.cloneNode(true);
+        nuevaFila.removeAttribute('id');
+        nuevaFila.innerHTML = nuevaFila.innerHTML.replaceAll('__INDEX__', indiceFila);
+        document.getElementById('detallesBody').appendChild(nuevaFila);
+        indiceFila++;
+        registrarBotonQuitar(nuevaFila.querySelector('.btn-quitar-fila'));
+    });
+
+    function registrarBotonQuitar(boton) {
+        boton.addEventListener('click', function () {
+            const filas = document.querySelectorAll('#detallesBody .fila-detalle');
+            if (filas.length > 1) {
+                boton.closest('tr').remove();
+            } else {
+                alert('La orden debe tener al menos un producto.');
+            }
+        });
+    }
+
+    document.querySelectorAll('#detallesBody .btn-quitar-fila').forEach(registrarBotonQuitar);
+</script>
+</body>
+</html>

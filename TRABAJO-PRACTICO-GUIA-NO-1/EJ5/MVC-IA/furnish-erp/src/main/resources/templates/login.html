@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<!--
+  ============================================================================
+  login.html
+  ============================================================================
+  Vista pública de inicio de sesión. El <form> apunta a /login por POST, que
+  es interceptado directamente por el filtro UsernamePasswordAuthenticationFilter
+  de Spring Security (configurado en SecurityConfig con loginProcessingUrl),
+  por eso este formulario NO tiene un @Controller que procese el POST.
+
+  El campo oculto CSRF (th:action ya lo agrega automáticamente Thymeleaf al
+  usar th:action en un <form method="post">) es obligatorio porque la
+  protección CSRF de Spring Security está habilitada.
+
+  Los parámetros ?error=true y ?logout=true son agregados por Spring Security
+  automáticamente (ver failureUrl y logoutSuccessUrl en SecurityConfig) para
+  poder mostrar el mensaje correspondiente.
+  ============================================================================
+-->
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout/base :: head(titulo='Iniciar sesión')}"></head>
+<body>
+<div class="login-wrapper">
+    <div class="login-card">
+        <div class="login-brand">
+            <div class="text-uppercase fw-bold" style="letter-spacing:.15rem;">Furnish</div>
+            <div class="small text-muted">Sistema de Gestión de <span class="accent">Compras &amp; Stock</span></div>
+        </div>
+
+        <div th:if="${param.error}" class="alert alert-danger py-2 small">
+            Usuario o contraseña inválidos.
+        </div>
+        <div th:if="${param.logout}" class="alert alert-success py-2 small">
+            Sesión cerrada correctamente.
+        </div>
+
+        <form th:action="@{/login}" method="post">
+            <div class="mb-3">
+                <label class="form-label small text-muted" for="username">Usuario</label>
+                <input type="text" class="form-control" id="username" name="username" required autofocus/>
+            </div>
+            <div class="mb-4">
+                <label class="form-label small text-muted" for="password">Contraseña</label>
+                <input type="password" class="form-control" id="password" name="password" required/>
+            </div>
+            <button type="submit" class="btn btn-primary w-100">Ingresar</button>
+        </form>
+    </div>
+</div>
+</body>
+</html>

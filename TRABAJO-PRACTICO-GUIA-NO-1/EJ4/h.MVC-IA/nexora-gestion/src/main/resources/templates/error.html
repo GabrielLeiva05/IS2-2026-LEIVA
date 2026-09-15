@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Error')}"></head>
+<body>
+
+<nav th:replace="~{fragments/layout :: navbar('')}"></nav>
+<div th:replace="~{fragments/layout :: mensajes}"></div>
+
+<section class="section" style="min-height: 50vh;">
+  <div class="container text-center">
+    <i class="bi bi-exclamation-octagon text-primary-custom" style="font-size: 3.5rem;"></i>
+    <h2 class="section-title mt-3">Ocurrió un problema</h2>
+    <p class="section-subtitle mx-auto" th:text="${mensaje}">Detalle del error.</p>
+    <a th:href="@{/}" class="btn btn-primary btn-lg-custom mt-3">Volver al inicio</a>
+  </div>
+</section>
+
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+</body>
+</html>

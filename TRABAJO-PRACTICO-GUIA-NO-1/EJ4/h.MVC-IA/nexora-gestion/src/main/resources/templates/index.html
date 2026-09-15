@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Inicio')}"></head>
+<body>
+
+<nav th:replace="~{fragments/layout :: navbar('home')}"></nav>
+<div th:replace="~{fragments/layout :: mensajes}"></div>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="container">
+    <div class="row align-items-center gy-5">
+      <div class="col-lg-6 hero-content">
+        <span class="eyebrow">Sistema de gestión</span>
+        <h1 class="mb-4">Usuarios, productos e <span class="text-primary-custom">inventario</span> en un solo lugar.</h1>
+        <p class="fs-5 mb-4" style="max-width: 540px;">
+          Nexora Gestión es una aplicación de práctica construida con Spring Boot,
+          Spring Data JPA (MySQL) y Thymeleaf, que implementa el diagrama de
+          clases de diseño: Usuarios, Administradores, Productos, Inventario
+          y Compras.
+        </p>
+        <div class="d-flex flex-wrap gap-3 mb-4 justify-content-lg-start justify-content-center">
+          <a th:if="${sessionTipo == null}" th:href="@{/registro}" class="btn btn-primary btn-lg-custom">Crear cuenta <i class="bi bi-arrow-right ms-1"></i></a>
+          <a th:if="${sessionTipo == 'USUARIO'}" th:href="@{/compras/carrito}" class="btn btn-primary btn-lg-custom">Ir a mi carrito <i class="bi bi-cart3 ms-1"></i></a>
+          <a th:if="${sessionTipo == 'ADMINISTRADOR'}" th:href="@{/admin/productos}" class="btn btn-primary btn-lg-custom">Ir al panel admin <i class="bi bi-speedometer2 ms-1"></i></a>
+          <a href="#catalogo" class="btn btn-light-custom btn-lg-custom">Ver catálogo</a>
+        </div>
+      </div>
+      <div class="col-lg-6">
+        <div class="hero-visual position-relative mx-auto" style="max-width: 480px;">
+          <div class="hero-mock-card">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+              <div class="d-flex gap-2">
+                <span style="width:10px;height:10px;border-radius:50%;background:#FF5F56;display:block;"></span>
+                <span style="width:10px;height:10px;border-radius:50%;background:#FFBD2E;display:block;"></span>
+                <span style="width:10px;height:10px;border-radius:50%;background:#27C93F;display:block;"></span>
+              </div>
+              <span class="badge-soft">MVC</span>
+            </div>
+            <div class="mock-bar" style="width: 90%;"></div>
+            <div class="mock-bar" style="width: 65%;"></div>
+            <div class="row g-2 my-3">
+              <div class="col-6">
+                <div class="p-3 rounded-3" style="background: var(--n-bg-alt);">
+                  <i class="bi bi-box-seam text-primary-custom fs-4"></i>
+                  <div class="fw-bold text-navy mt-2 font-display" th:text="${#lists.size(productos)}">4</div>
+                  <small class="text-slate">Productos activos</small>
+                </div>
+              </div>
+              <div class="col-6">
+                <div class="p-3 rounded-3" style="background: #F4F0FF;">
+                  <i class="bi bi-database-check fs-4" style="color:var(--n-secondary) !important;"></i>
+                  <div class="fw-bold text-navy mt-2 font-display">MySQL</div>
+                  <small class="text-slate">Persistencia ORM</small>
+                </div>
+              </div>
+            </div>
+            <div class="mock-bar" style="width: 100%; height: 70px; border-radius: 10px; background: linear-gradient(90deg, var(--n-bg-alt), #F4F0FF);"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- CATÁLOGO -->
+<section class="section bg-soft" id="catalogo">
+  <div class="container">
+    <div class="row section-header align-items-end">
+      <div class="col-lg-7">
+        <span class="eyebrow">Catálogo</span>
+        <h2 class="section-title">Productos disponibles</h2>
+        <p class="section-subtitle">Iniciá sesión como usuario para agregar productos a tu carrito.</p>
+      </div>
+    </div>
+
+    <div class="row g-4">
+      <div class="col-md-6 col-lg-3" th:each="producto : ${productos}">
+        <div class="p-4 rounded-3 h-100" style="background: var(--n-white); box-shadow: var(--n-shadow-sm); border: 1px solid var(--n-border);">
+          <div class="icon-box icon-box-primary mb-3" style="width:46px;height:46px;border-radius:12px;">
+            <i class="bi bi-box-seam"></i>
+          </div>
+          <h5 class="text-navy" th:text="${producto.nombre}">Nombre del producto</h5>
+          <p class="text-slate small mb-3" th:text="${producto.descripcion}">Descripción</p>
+          <div class="d-flex justify-content-between align-items-center">
+            <span class="fw-bold text-navy font-display" th:text="'$' + ${#numbers.formatDecimal(producto.precio, 1, 2)}">$0.00</span>
+            <a th:if="${sessionTipo == 'USUARIO'}" th:href="@{/compras/carrito}" class="card-link-arrow">Agregar al carrito <i class="bi bi-arrow-right"></i></a>
+          </div>
+        </div>
+      </div>
+      <div class="col-12" th:if="${#lists.isEmpty(productos)}">
+        <p class="text-slate">Todavía no hay productos cargados en el catálogo.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+</body>
+</html>
