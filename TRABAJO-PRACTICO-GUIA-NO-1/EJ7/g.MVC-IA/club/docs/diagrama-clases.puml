@@ -1,0 +1,80 @@
+@startuml
+skinparam classAttributeIconSize 0
+hide empty methods
+
+class Persona {
+  - id: String
+  - nombre: String
+  - apellido: String
+  - email: String
+  - telefono: String
+  - fechaNacimiento: LocalDate
+  - eliminado: boolean
+}
+
+class Socio {
+  - fechaAlta: LocalDate
+  - estado: EstadoSocio
+}
+
+class Imagen {
+  - id: String
+  - nombre: String
+  - mime: String
+  - contenido: byte[]
+  - eliminado: boolean
+}
+
+class RegistroAcceso {
+  - id: String
+  - fecha: LocalDate
+  - horaEntrada: LocalTime
+  - horaSalida: LocalTime
+}
+
+class GrupoFamiliar {
+  - id: String
+  - nombre: String
+  - cuotaMensual: BigDecimal
+}
+
+class Pago {
+  - id: String
+  - fechaPago: LocalDate
+  - periodo: String
+  - importe: BigDecimal
+  - medioPago: MedioPago
+  - estado: EstadoPago
+  - referencia: String
+}
+
+enum EstadoSocio { ACTIVO; INACTIVO }
+enum EstadoPago { REGISTRADO; ANULADO }
+enum MedioPago { EFECTIVO; TRANSFERENCIA; MERCADO_PAGO }
+
+Persona <|-- Socio
+Persona "1" -- "0..1" Imagen
+Persona "1" -- "0..*" RegistroAcceso
+GrupoFamiliar "1" o-- "0..*" Persona : familiares
+GrupoFamiliar "1" -- "1" Socio : titular
+GrupoFamiliar "1" -- "0..*" Pago
+Pago --> MedioPago
+Pago --> EstadoPago
+Socio --> EstadoSocio
+
+note right of GrupoFamiliar
+La cuota pertenece a la familia.
+El titular es un Socio.
+Los integrantes son Personas.
+end note
+
+note bottom of Pago
+Una familia no puede tener dos pagos
+para el mismo periodo.
+Los medios permitidos son:
+Efectivo, Transferencia y Mercado Pago.
+end note
+
+note "Las entidades solo contienen estado, mapeo JPA, getters/setters y constructores.\nLas reglas de negocio se implementan exclusivamente en los Services." as N
+N .. Persona
+@enduml

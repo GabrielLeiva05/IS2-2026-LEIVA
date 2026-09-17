@@ -1,0 +1,3 @@
+package com.club.controller;
+import com.club.dto.ImagenResponse; import com.club.service.ImagenService; import lombok.RequiredArgsConstructor; import org.springframework.http.*; import org.springframework.stereotype.Controller; import org.springframework.web.bind.annotation.*;
+@Controller @RequiredArgsConstructor public class ImagenController { private final ImagenService service; @GetMapping("/personas/{personaId}/imagen") @ResponseBody public ResponseEntity<byte[]> ver(@PathVariable String personaId){ImagenResponse i=service.obtener(personaId);return ResponseEntity.ok().cacheControl(CacheControl.noCache()).contentType(MediaType.parseMediaType(i.mime())).body(i.contenido());} }

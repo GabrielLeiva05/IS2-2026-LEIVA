@@ -1,0 +1,3 @@
+package com.club.service;
+import com.club.dto.RevisionResponse; import com.club.repository.RevisionAuditoriaRepository; import lombok.RequiredArgsConstructor; import org.springframework.stereotype.Service; import java.time.Instant; import java.util.List;
+@Service @RequiredArgsConstructor public class RevisionService { private final RevisionAuditoriaRepository repository; public List<RevisionResponse> listar(){return repository.findAll().stream().sorted((a,b)->Integer.compare(b.getId(),a.getId())).map(r->new RevisionResponse(r.getId(),Instant.ofEpochMilli(r.getTimestamp()),r.getUsuario())).toList();} }

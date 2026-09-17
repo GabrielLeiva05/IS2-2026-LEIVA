@@ -1,0 +1,3 @@
+package com.club.controller;
+import com.club.service.*; import lombok.RequiredArgsConstructor; import org.springframework.stereotype.Controller; import org.springframework.ui.Model; import org.springframework.web.bind.annotation.GetMapping;
+@Controller @RequiredArgsConstructor public class HomeController { private final SocioService socio; private final FamiliaService familia; private final PagoService pago; @GetMapping("/") public String home(Model m){m.addAttribute("cantidadSocios",socio.listar().size());m.addAttribute("cantidadFamilias",familia.listar().size());m.addAttribute("cantidadPagos",pago.listarTodos().size());return "index";} }

@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{fragments/header :: head('Inicio')}"></head>
+<body>
+<header th:replace="~{fragments/header :: nav}"></header>
+<main class="container">
+    <div th:replace="~{fragments/header :: messages}"></div>
+    <section class="hero"><h1>Gestión del Club</h1><p>Administración de socios, grupos familiares, cuotas, accesos e imágenes.</p></section>
+    <section class="cards">
+        <a class="card" th:href="@{/socios}"><span>Socios</span><strong th:text="${cantidadSocios}">0</strong></a>
+        <a class="card" th:href="@{/familias}"><span>Familias</span><strong th:text="${cantidadFamilias}">0</strong></a>
+        <a class="card" th:href="@{/pagos}"><span>Pagos registrados</span><strong th:text="${cantidadPagos}">0</strong></a>
+    </section>
+    <section class="panel"><h2>Operaciones rápidas</h2><div class="actions"><a sec:authorize="hasRole('ADMIN')" class="btn" th:href="@{/socios/nuevo}">Nuevo socio</a><a sec:authorize="hasRole('ADMIN')" class="btn" th:href="@{/familias/nuevo}">Nueva familia</a><a sec:authorize="hasRole('ADMIN')" class="btn" th:href="@{/pagos/nuevo}">Registrar cuota</a><a class="btn" th:href="@{/accesos}">Ver accesos</a></div></section>
+</main>
+</body></html>

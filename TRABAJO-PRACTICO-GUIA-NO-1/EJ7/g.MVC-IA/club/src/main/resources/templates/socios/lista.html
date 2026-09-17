@@ -1,0 +1,8 @@
+<!DOCTYPE html><html lang="es" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security"><head th:replace="~{fragments/header :: head('Socios')}"></head><body>
+<header th:replace="~{fragments/header :: nav}"></header><main class="container">
+<div th:replace="~{fragments/header :: messages}"></div>
+<div class="page-title"><div><h1>Socios</h1><p>Alta, baja, reactivación y consulta de socios.</p></div><a sec:authorize="hasRole('ADMIN')" class="btn" th:href="@{/socios/nuevo}">+ Nuevo socio</a></div>
+<div class="table-wrap"><table><thead><tr><th>Nombre</th><th>Email</th><th>Teléfono</th><th>Estado</th><th>Familia</th><th>Acciones</th></tr></thead><tbody>
+<tr th:each="s : ${socios}"><td><a th:href="@{'/socios/' + ${s.id}}" th:text="${s.nombre + ' ' + s.apellido}"></a></td><td th:text="${s.email}"></td><td th:text="${s.telefono}"></td><td><span class="badge" th:text="${s.estado}"></span></td><td th:text="${s.familiaNombre != null ? s.familiaNombre : 'Sin familia'}"></td><td class="actions-inline"><form sec:authorize="hasRole('ADMIN')" th:if="${!s.eliminado}" th:action="@{'/socios/' + ${s.id} + '/baja'}" method="post"><button class="btn danger" type="submit">Dar de baja</button></form><form sec:authorize="hasRole('ADMIN')" th:if="${s.eliminado}" th:action="@{'/socios/' + ${s.id} + '/reactivar'}" method="post"><button class="btn" type="submit">Reactivar</button></form></td></tr>
+<tr th:if="${#lists.isEmpty(socios)}"><td colspan="6" class="empty">No hay socios registrados.</td></tr>
+</tbody></table></div></main></body></html>

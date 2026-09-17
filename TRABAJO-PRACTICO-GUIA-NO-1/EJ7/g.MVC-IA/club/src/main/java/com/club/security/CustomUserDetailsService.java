@@ -1,0 +1,3 @@
+package com.club.security;
+import com.club.entity.Usuario; import com.club.repository.UsuarioRepository; import lombok.RequiredArgsConstructor; import org.springframework.security.core.userdetails.*; import org.springframework.stereotype.Service;
+@Service @RequiredArgsConstructor public class CustomUserDetailsService implements UserDetailsService { private final UsuarioRepository repository; @Override public UserDetails loadUserByUsername(String username)throws UsernameNotFoundException{Usuario u=repository.findByUsernameIgnoreCase(username).orElseThrow(()->new UsernameNotFoundException("Usuario no encontrado."));return User.withUsername(u.getUsername()).password(u.getPassword()).roles(u.getRol().name()).disabled(!u.isActivo()).build();} }
