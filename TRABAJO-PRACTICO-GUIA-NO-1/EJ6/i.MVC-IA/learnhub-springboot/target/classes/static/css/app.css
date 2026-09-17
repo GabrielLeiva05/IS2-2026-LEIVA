@@ -1,0 +1,14 @@
+/* Estilos propios de integración. La identidad visual parte de la plantilla LearnHub. */
+:root { --lh-primary: #754ffe; }
+body { background: #fff; color: #18113c; }
+.navbar-brand { color: #18113c; }
+.hero { padding: 6rem 0; }
+.hero-card { border: 0; border-radius: 1.5rem; overflow: hidden; }
+.section-title { max-width: 700px; }
+.course-card { height: 100%; border: 1px solid #e9e7f5; border-radius: 1rem; transition: transform .15s ease, box-shadow .15s ease; }
+.course-card:hover { transform: translateY(-3px); box-shadow: 0 .75rem 2rem rgba(24,17,60,.08); }
+.form-shell { max-width: 760px; margin: 4rem auto; }
+.auth-shell { max-width: 520px; margin: 5rem auto; }
+.footer { margin-top: 5rem; }
+.error-text { color: #b42318; font-size: .875rem; }
+.avatar-lg { width: 72px; height: 72px; object-fit: cover; }

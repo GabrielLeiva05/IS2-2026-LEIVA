@@ -1,0 +1,36 @@
+@startuml
+skinparam classAttributeIconSize 0
+class Profesor {
+ - id : Long
+ - nombre : String
+ - apellido : String
+ - especialidad : String
+ - eliminado : boolean
+ - sexo : Sexo
+ - fechaNacimiento : LocalDate
+ + registrarProfesor()
+ + editarProfesor()
+ + eliminarProfesor()
+ + listarMaterias()
+}
+class Usuario {
+ - id : Long
+ - email : String
+ - passwordHash : String
+ - habilitado : boolean
+}
+class Rol { - id : Long - nombre : String }
+class Grado { - id : Long - nivel : String + agregarAula() }
+class Aula { - id : Long - division : String + obtenerCantidadAlumnos() }
+class Alumno { - id : Long - nombre : String - apellido : String - fechaNacimiento : Date - eliminado : boolean + registrarAlumno() + editarAlumno() + eliminarAlumno() }
+class Materia { - id : Long - nombre : String - eliminado : boolean + registrarMateria() + editarMateria() + eliminarMateria() }
+class Nota { - id : Long - fecha : Date - valor : float }
+
+Profesor "1" -- "1" Usuario : credenciales
+Usuario "*" -- "*" Rol
+Grado "1" *-- "1..*" Aula
+Aula "1..*" -- "1..*" Alumno
+Profesor "1" <-- "*" Materia : dicta
+Materia "*" --> "1" Alumno
+Materia "1" <-- "*" Nota
+@enduml

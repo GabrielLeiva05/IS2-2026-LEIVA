@@ -1,0 +1,22 @@
+<!DOCTYPE html><html lang="es" xmlns:th="http://www.thymeleaf.org"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Mis materias | LearnHub</title><link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"><link rel="stylesheet" th:href="@{/css/app.css}"></head><body>
+<div th:replace="~{fragments :: navbar}"></div>
+<main class="container py-5">
+  <h1 class="h3 fw-bold">Mis materias</h1>
+  <p class="text-muted">Clases que dictás actualmente (listarClasesDictadas).</p>
+
+  <div class="card border-0 shadow-sm p-4">
+    <div class="table-responsive">
+      <table class="table align-middle">
+        <thead><tr><th>Materia</th><th></th></tr></thead>
+        <tbody>
+          <tr th:each="m : ${materias}">
+            <td th:text="${m.nombre}"></td>
+            <td class="text-end"><a class="btn btn-sm btn-primary" th:href="@{'/docente/materia/' + ${m.id} + '/notas'}">Ver notas</a></td>
+          </tr>
+          <tr th:if="${#lists.isEmpty(materias)}"><td colspan="2" class="text-muted text-center">Todavía no tenés materias asignadas. Contactá a un administrador.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</main>
+</body></html>
